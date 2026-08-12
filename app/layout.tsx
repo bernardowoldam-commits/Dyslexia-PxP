@@ -16,122 +16,149 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body className="bg-[#F3EAD9] text-[#244A6F] antialiased">
-        <header className="sticky top-0 z-50 border-b border-[#6997B8]/20 bg-[#F3EAD9]/95 backdrop-blur">
-          <div className="mx-auto flex min-h-[84px] max-w-7xl items-center justify-between px-6">
-            
-            {/* LOGO */}
-            <Link
-              href="/"
-              className="flex items-center gap-3 shrink-0"
-              aria-label="DysHelp - página inicial"
-            >
-              <Image
-                src="/DISLEXIA (1).png"
-                alt="DysHelp"
-                width={64}
-                height={64}
-                priority
-                className="h-16 w-auto object-contain"
-              />
-            </Link>
+      <body className="bg-[#F3EAD9] text-[#6997B8] antialiased">
 
-            {/* NAVEGAÇÃO PRINCIPAL */}
-            <nav
-              className="hidden items-center gap-9 md:flex"
-              aria-label="Navegação principal"
-            >
-              <Link
-                href="/"
-                className="font-semibold text-[#6997B8] transition hover:text-[#F3A05B]"
-              >
-                Início
-              </Link>
+        {/* BARRA PRINCIPAL FIXA */}
+        <header className="fixed inset-x-0 top-0 z-[100] px-3 pt-3 sm:px-5">
+          <div className="mx-auto max-w-7xl">
 
-              <Link
-                href="/estudo/dislexia"
-                className="font-semibold text-[#6997B8] transition hover:text-[#F3A05B]"
-              >
-                Dislexia
-              </Link>
+            <div className="rounded-[24px] border border-[#6997B8]/15 bg-[#F3EAD9]/95 shadow-[0_8px_30px_rgba(54,91,116,0.10)] backdrop-blur-xl">
 
-              <Link
-                href="/atividades"
-                className="font-semibold text-[#6997B8] transition hover:text-[#F3A05B]"
-              >
-                Atividades
-              </Link>
+              <div className="flex min-h-[76px] items-center justify-between gap-4 px-4 sm:px-6">
 
-              <Link
-                href="/profissionais"
-                className="font-semibold text-[#6997B8] transition hover:text-[#F3A05B]"
-              >
-                Profissionais
-              </Link>
+                {/* LOGO */}
+                <Link
+                  href="/"
+                  aria-label="DysHelp - página inicial"
+                  className="flex shrink-0 items-center"
+                >
+                  <Image
+                    src="/DISLEXIA (1).png"
+                    alt="DysHelp"
+                    width={150}
+                    height={80}
+                    priority
+                    className="h-14 w-auto object-contain sm:h-16"
+                  />
+                </Link>
 
-              <Link
-                href="/ajuda"
-                className="font-semibold text-[#6997B8] transition hover:text-[#F3A05B]"
-              >
-                Ajuda
-              </Link>
-            </nav>
+                {/* MENU DESKTOP */}
+                <nav
+                  className="hidden items-center gap-1 md:flex"
+                  aria-label="Navegação principal"
+                >
 
-            {/* NIA */}
-            <Link
-              href="/nia"
-              className="rounded-2xl bg-[#6997B8] px-7 py-4 font-bold text-white transition hover:bg-[#F3A05B]"
-            >
-              NIA
-            </Link>
-          </div>
+                  <Link
+                    href="/"
+                    className="rounded-full px-4 py-2.5 text-sm font-bold text-[#6997B8] transition-all hover:bg-[#BAD8E8]/50 hover:text-[#244A6F]"
+                  >
+                    Início
+                  </Link>
 
-          {/* NAVEGAÇÃO MOBILE */}
-          <div className="border-t border-[#6997B8]/15 md:hidden">
-            <nav
-              className="mx-auto flex max-w-7xl gap-5 overflow-x-auto px-6 py-3"
-              aria-label="Navegação móvel"
-            >
-              <Link
-                href="/"
-                className="whitespace-nowrap font-semibold text-[#6997B8]"
-              >
-                Início
-              </Link>
+                  <Link
+                    href="/estudo/dislexia"
+                    className="rounded-full px-4 py-2.5 text-sm font-bold text-[#6997B8] transition-all hover:bg-[#BAD8E8]/50 hover:text-[#244A6F]"
+                  >
+                    Dislexia
+                  </Link>
 
-              <Link
-                href="/estudo/dislexia"
-                className="whitespace-nowrap font-semibold text-[#6997B8]"
-              >
-                Dislexia
-              </Link>
+                  <Link
+                    href="/atividades"
+                    className="rounded-full px-4 py-2.5 text-sm font-bold text-[#6997B8] transition-all hover:bg-[#BAD8E8]/50 hover:text-[#244A6F]"
+                  >
+                    Atividades
+                  </Link>
 
-              <Link
-                href="/atividades"
-                className="whitespace-nowrap font-semibold text-[#6997B8]"
-              >
-                Atividades
-              </Link>
+                  <Link
+                    href="/profissionais"
+                    className="rounded-full px-4 py-2.5 text-sm font-bold text-[#6997B8] transition-all hover:bg-[#BAD8E8]/50 hover:text-[#244A6F]"
+                  >
+                    Profissionais
+                  </Link>
 
-              <Link
-                href="/profissionais"
-                className="whitespace-nowrap font-semibold text-[#6997B8]"
-              >
-                Profissionais
-              </Link>
+                  <Link
+                    href="/ajuda"
+                    className="rounded-full px-4 py-2.5 text-sm font-bold text-[#6997B8] transition-all hover:bg-[#BAD8E8]/50 hover:text-[#244A6F]"
+                  >
+                    Ajuda
+                  </Link>
 
-              <Link
-                href="/ajuda"
-                className="whitespace-nowrap font-semibold text-[#6997B8]"
-              >
-                Ajuda
-              </Link>
-            </nav>
+                </nav>
+
+                {/* NIA */}
+                <Link
+                  href="/nia"
+                  aria-label="Conversar com a NIA"
+                  className="group flex shrink-0 items-center gap-2 rounded-full bg-[#6997B8] px-5 py-3 text-sm font-extrabold text-white shadow-[0_5px_15px_rgba(105,151,184,0.25)] transition-all hover:-translate-y-0.5 hover:bg-[#F3A05B] hover:shadow-[0_7px_18px_rgba(243,160,91,0.25)]"
+                >
+                  <span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/20 text-base">
+                    ✦
+                  </span>
+
+                  <span>NIA</span>
+                </Link>
+
+              </div>
+
+              {/* MENU MOBILE */}
+              <div className="border-t border-[#6997B8]/10 px-4 pb-3 pt-2 md:hidden">
+
+                <nav
+                  className="flex gap-2 overflow-x-auto pb-1"
+                  aria-label="Navegação móvel"
+                >
+
+                  <Link
+                    href="/"
+                    className="shrink-0 rounded-full bg-white/60 px-4 py-2 text-sm font-bold text-[#6997B8]"
+                  >
+                    Início
+                  </Link>
+
+                  <Link
+                    href="/estudo/dislexia"
+                    className="shrink-0 rounded-full bg-white/60 px-4 py-2 text-sm font-bold text-[#6997B8]"
+                  >
+                    Dislexia
+                  </Link>
+
+                  <Link
+                    href="/atividades"
+                    className="shrink-0 rounded-full bg-white/60 px-4 py-2 text-sm font-bold text-[#6997B8]"
+                  >
+                    Atividades
+                  </Link>
+
+                  <Link
+                    href="/profissionais"
+                    className="shrink-0 rounded-full bg-white/60 px-4 py-2 text-sm font-bold text-[#6997B8]"
+                  >
+                    Profissionais
+                  </Link>
+
+                  <Link
+                    href="/ajuda"
+                    className="shrink-0 rounded-full bg-white/60 px-4 py-2 text-sm font-bold text-[#6997B8]"
+                  >
+                    Ajuda
+                  </Link>
+
+                </nav>
+
+              </div>
+
+            </div>
           </div>
         </header>
 
-        {/* CONTEÚDO DAS PÁGINAS */}
-        <main>{children}</main>
+        {/* ESPAÇO PARA A BARRA FIXA */}
+        <div className="h-[104px] sm:h-[108px]" />
+
+        {/* CONTEÚDO */}
+        <main>
+          {children}
+        </main>
+
       </body>
     </html>
   );

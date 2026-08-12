@@ -1,374 +1,260 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, KeyboardEvent, useState } from "react";
+import { useState } from "react";
 
 export default function AjudaPage() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [question, setQuestion] = useState("");
-  const [answer, setAnswer] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  function openChat() {
-    setIsOpen(true);
-    setError("");
-  }
-
-  function closeChat() {
-    setIsOpen(false);
-    setLoading(false);
-  }
-
-  function newQuestion() {
-    setQuestion("");
-    setAnswer("");
-    setError("");
-  }
-
-  async function sendQuestion(event?: FormEvent) {
-    event?.preventDefault();
-
-    const text = question.trim();
-
-    if (!text) {
-      setError("Digite uma pergunta.");
-      return;
-    }
-
-    setLoading(true);
-    setError("");
-    setAnswer("");
-
-    try {
-      const response = await fetch("/api/nia", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          question: text,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(
-          data?.error || "Não foi possível obter uma resposta da NIA."
-        );
-      }
-
-      setAnswer(
-        data?.answer ||
-          "Não consegui preparar uma resposta agora. Tente novamente."
-      );
-    } catch (err) {
-      console.error("Erro ao conversar com a NIA:", err);
-
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Não foi possível obter uma resposta da NIA."
-      );
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  function handleKeyDown(event: KeyboardEvent<HTMLTextAreaElement>) {
-    if (event.key === "Enter" && !event.shiftKey) {
-      event.preventDefault();
-      sendQuestion();
-    }
-  }
+  const [niaOpen, setNiaOpen] = useState(false);
 
   return (
-    <main className="min-h-screen bg-white">
-      {/* HERO */}
-      <section className="bg-[#173b57] text-white">
-        <div className="container">
-          <div className="grid min-h-[680px] items-center gap-12 py-16 lg:grid-cols-2">
-            <div>
-              <p className="mb-6 text-sm font-bold uppercase tracking-[0.2em] text-white/70">
-                NIA · NÚCLEO DE INTELIGÊNCIA E APOIO
-              </p>
+    <main className="min-h-screen bg-white text-slate-800">
+      {/* CABEÇALHO */}
+      <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
+        <div className="container flex min-h-[76px] items-center justify-between gap-4">
+          <Link
+            href="/"
+            aria-label="Dyslexia Tortuguitas - voltar para a página inicial"
+            className="shrink-0"
+          >
+            <div className="text-xl font-extrabold tracking-tight text-[#25577d]">
+              DYSLEXIA TORTUGUITAS
+            </div>
 
-              <h1 className="max-w-2xl text-5xl font-extrabold leading-[0.98] tracking-tight md:text-7xl">
-                Transforme dúvidas em caminhos possíveis.
+            <div className="text-[10px] font-bold tracking-[0.18em] text-slate-500">
+              COMPREENDER. ACOLHER. APOIAR.
+            </div>
+          </Link>
+
+          <Link
+            href="/"
+            className="btn btn-soft"
+            aria-label="Voltar para a página inicial"
+          >
+            ← Voltar ao início
+          </Link>
+        </div>
+      </header>
+
+      {/* CONTEÚDO PRINCIPAL */}
+      <article>
+        {/* INTRODUÇÃO */}
+        <section className="section">
+          <div className="container">
+            <div className="mx-auto max-w-4xl">
+              <p className="eyebrow">Ajuda e orientação</p>
+
+              <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-[#25577d] md:text-6xl">
+                Como podemos ajudar?
               </h1>
 
-              <p className="mt-8 max-w-xl text-xl leading-9 text-white/75">
-                Uma ferramenta de apoio educativo preparada para ajudar
-                responsáveis, estudantes e educadores a organizar dúvidas e
-                encontrar próximos caminhos.
+              <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-600 md:text-xl">
+                Esta área reúne informações para ajudar você a compreender
+                melhor o projeto, encontrar orientação educativa e saber quando
+                procurar apoio especializado.
               </p>
-
-              <p className="mt-6 max-w-xl text-base leading-7 text-white/65">
-                A NIA possui finalidade educativa e não substitui avaliação,
-                diagnóstico ou acompanhamento profissional.
-              </p>
-
-              <button
-                type="button"
-                onClick={openChat}
-                className="mt-9 rounded-xl bg-[#d6b43f] px-7 py-4 text-base font-extrabold text-slate-900 transition hover:scale-[1.02] hover:bg-[#e0c04e]"
-              >
-                Conversar com a NIA 💬
-              </button>
-            </div>
-
-            {/* PREVIEW */}
-            <div className="rounded-[30px] bg-white/90 p-4 shadow-2xl backdrop-blur">
-              <div className="rounded-[24px] border border-slate-200 bg-white p-7 text-slate-800">
-                <div className="flex items-center gap-4 border-b border-slate-200 pb-5">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-sky-100 text-xl">
-                    ✨
-                  </div>
-
-                  <div>
-                    <h2 className="text-lg font-extrabold text-[#24557b]">
-                      NIA
-                    </h2>
-                    <p className="text-sm text-slate-500">
-                      Apoio educativo
-                    </p>
-                  </div>
-                </div>
-
-                <div className="mt-5 space-y-5">
-                  <div className="ml-auto max-w-[88%] rounded-2xl rounded-tr-sm bg-[#173b57] p-5 text-white">
-                    Meu filho fica frustrado quando precisa ler. Como posso
-                    ajudar?
-                  </div>
-
-                  <div className="max-w-[88%] rounded-2xl rounded-tl-sm border border-slate-200 bg-slate-50 p-5 leading-7 text-slate-600">
-                    Podemos pensar em estratégias para tornar a leitura mais
-                    confortável, dividir a atividade em etapas e observar o
-                    que está dificultando a experiência.
-                  </div>
-
-                  <div className="flex gap-3">
-                    <div className="h-12 flex-1 rounded-xl border border-slate-200 bg-white" />
-                    <div className="flex h-12 w-14 items-center justify-center rounded-xl bg-[#24557b] text-xl text-white">
-                      →
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* CONTEÚDO */}
-      <section className="section">
-        <div className="container">
-          <div className="mx-auto max-w-6xl">
-            <p className="eyebrow">Como a NIA pode ajudar</p>
-
-            <h2 className="mt-3 max-w-3xl text-4xl font-extrabold tracking-tight text-deep md:text-5xl">
-              Informação clara para transformar dúvidas em próximos passos.
-            </h2>
-
-            <div className="mt-12 grid gap-6 md:grid-cols-3">
-              <article className="card p-7">
-                <div className="text-3xl">💡</div>
-                <h3 className="mt-5 text-xl font-extrabold text-deep">
-                  Organizar dúvidas
-                </h3>
-                <p className="mt-3 leading-7 text-slate-600">
-                  Ajuda a transformar uma preocupação ampla em perguntas mais
-                  claras e objetivas.
-                </p>
-              </article>
-
-              <article className="card p-7">
-                <div className="text-3xl">📚</div>
-                <h3 className="mt-5 text-xl font-extrabold text-deep">
-                  Apoio educativo
-                </h3>
-                <p className="mt-3 leading-7 text-slate-600">
-                  Pode sugerir estratégias de estudo, organização e apoio à
-                  aprendizagem.
-                </p>
-              </article>
-
-              <article className="card p-7">
-                <div className="text-3xl">🧭</div>
-                <h3 className="mt-5 text-xl font-extrabold text-deep">
-                  Próximos caminhos
-                </h3>
-                <p className="mt-3 leading-7 text-slate-600">
-                  Ajuda a identificar possibilidades e quando pode ser
-                  importante buscar orientação especializada.
-                </p>
-              </article>
-            </div>
-
-            <div className="mt-10 rounded-2xl border border-slate-200 bg-slate-50 p-6">
-              <p className="text-sm leading-7 text-slate-600">
-                <strong className="text-slate-800">Importante:</strong> a NIA é
-                uma ferramenta educativa. Ela não diagnostica dislexia, não
-                prescreve tratamentos e não substitui profissionais de saúde,
-                educação ou avaliação especializada.
-              </p>
-            </div>
-
-            <div className="mt-10 flex flex-wrap gap-3">
-              <Link href="/" className="btn btn-soft">
-                ← Voltar ao início
-              </Link>
-
-              <Link href="/estudo/dislexia" className="btn btn-primary">
-                Estudar sobre dislexia →
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* MODAL DA NIA */}
-      {isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/65 p-4 backdrop-blur-sm">
-          <div
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="nia-title"
-            className="flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-[28px] bg-white shadow-2xl"
-          >
-            {/* CABEÇALHO */}
-            <div className="flex items-start justify-between border-b border-slate-200 px-6 py-5 md:px-7">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#5a7690]">
+        {/* NIA */}
+        <section
+          aria-labelledby="nia-heading"
+          className="border-y border-slate-200 bg-[#f7f5ef] py-16"
+        >
+          <div className="container">
+            <div className="mx-auto max-w-4xl">
+              <div className="rounded-[28px] bg-white p-7 shadow-sm md:p-10">
+                <p className="text-sm font-extrabold uppercase tracking-[0.18em] text-[#5a7690]">
                   NIA
                 </p>
 
                 <h2
-                  id="nia-title"
-                  className="mt-1 text-2xl font-extrabold text-[#24557b] md:text-3xl"
+                  id="nia-heading"
+                  className="mt-3 text-3xl font-extrabold tracking-tight text-[#25577d] md:text-4xl"
                 >
-                  Como posso apoiar sua dúvida?
+                  Núcleo de Inteligência e Apoio
+                </h2>
+
+                <p className="mt-5 max-w-3xl text-base leading-8 text-slate-600 md:text-lg">
+                  A NIA foi pensada como uma ferramenta de apoio educativo para
+                  ajudar a organizar dúvidas e encontrar caminhos relacionados
+                  à aprendizagem, leitura, escrita e estudo.
+                </p>
+
+                <div className="mt-7">
+                  <button
+                    type="button"
+                    onClick={() => setNiaOpen(true)}
+                    className="btn btn-primary"
+                    aria-haspopup="dialog"
+                    aria-controls="nia-dialog"
+                  >
+                    Conversar com a NIA
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ORIENTAÇÕES */}
+        <section className="section" aria-labelledby="orientacoes-heading">
+          <div className="container">
+            <div className="mx-auto max-w-4xl">
+              <p className="eyebrow">Orientações</p>
+
+              <h2
+                id="orientacoes-heading"
+                className="mt-4 text-3xl font-extrabold tracking-tight text-[#25577d] md:text-4xl"
+              >
+                O que você encontra aqui
+              </h2>
+
+              <div className="mt-10 space-y-5">
+                <section className="card p-6 md:p-7">
+                  <h3 className="text-xl font-extrabold text-[#25577d]">
+                    Informação educativa
+                  </h3>
+
+                  <p className="mt-3 leading-7 text-slate-600">
+                    Conteúdos para compreender melhor questões relacionadas à
+                    aprendizagem e às dificuldades de leitura e escrita.
+                  </p>
+                </section>
+
+                <section className="card p-6 md:p-7">
+                  <h3 className="text-xl font-extrabold text-[#25577d]">
+                    Estratégias de apoio
+                  </h3>
+
+                  <p className="mt-3 leading-7 text-slate-600">
+                    Sugestões educativas que podem ajudar a tornar determinadas
+                    atividades mais organizadas, claras e acessíveis.
+                  </p>
+                </section>
+
+                <section className="card p-6 md:p-7">
+                  <h3 className="text-xl font-extrabold text-[#25577d]">
+                    Quando buscar ajuda profissional
+                  </h3>
+
+                  <p className="mt-3 leading-7 text-slate-600">
+                    Informações educativas não substituem uma avaliação
+                    individual. Quando houver preocupação persistente,
+                    sofrimento ou dificuldades significativas, é importante
+                    procurar profissionais qualificados.
+                  </p>
+                </section>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* IMPORTANTE */}
+        <section
+          aria-labelledby="importante-heading"
+          className="border-t border-slate-200 bg-slate-50 py-16"
+        >
+          <div className="container">
+            <div className="mx-auto max-w-4xl">
+              <div className="rounded-[28px] border border-slate-200 bg-white p-7 md:p-9">
+                <p className="eyebrow">Importante</p>
+
+                <h2
+                  id="importante-heading"
+                  className="mt-4 text-3xl font-extrabold text-[#25577d]"
+                >
+                  Informação não é diagnóstico.
+                </h2>
+
+                <p className="mt-5 leading-8 text-slate-600">
+                  A Dyslexia Tortuguitas tem uma proposta educativa e de
+                  acolhimento. Nenhuma ferramenta desta página deve ser usada
+                  para diagnosticar uma pessoa ou substituir avaliação e
+                  acompanhamento profissional.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </article>
+
+      {/* RODAPÉ */}
+      <footer className="border-t border-slate-200 bg-white py-8">
+        <div className="container">
+          <div className="flex flex-col gap-3 text-sm text-slate-500 md:flex-row md:items-center md:justify-between">
+            <p>
+              © {new Date().getFullYear()} Dyslexia Tortuguitas
+            </p>
+
+            <Link
+              href="/"
+              className="font-bold text-[#25577d] hover:underline focus:outline-none focus:ring-2 focus:ring-[#25577d] focus:ring-offset-2"
+            >
+              Voltar ao início
+            </Link>
+          </div>
+        </div>
+      </footer>
+
+      {/* NIA */}
+      {niaOpen && (
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/60 p-4"
+          role="presentation"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) {
+              setNiaOpen(false);
+            }
+          }}
+        >
+          <div
+            id="nia-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="nia-dialog-title"
+            className="w-full max-w-2xl overflow-hidden rounded-[28px] bg-white shadow-2xl"
+          >
+            <div className="flex items-start justify-between border-b border-slate-200 px-6 py-5">
+              <div>
+                <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-[#5a7690]">
+                  NIA
+                </p>
+
+                <h2
+                  id="nia-dialog-title"
+                  className="mt-1 text-2xl font-extrabold text-[#25577d]"
+                >
+                  Núcleo de Inteligência e Apoio
                 </h2>
               </div>
 
               <button
                 type="button"
-                onClick={closeChat}
-                aria-label="Fechar"
-                className="ml-4 text-3xl leading-none text-slate-400 transition hover:text-slate-700"
+                onClick={() => setNiaOpen(false)}
+                aria-label="Fechar janela da NIA"
+                className="flex h-10 w-10 items-center justify-center rounded-full text-2xl text-slate-500 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-[#25577d]"
               >
                 ×
               </button>
             </div>
 
-            {/* RESPOSTA */}
-            <div className="overflow-y-auto px-6 py-6 md:px-7">
-              {loading && (
-                <div className="rounded-2xl bg-slate-50 p-5 text-slate-600">
-                  <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#5a7690]">
-                    NIA
-                  </p>
+            <div className="p-6">
+              <p className="leading-7 text-slate-600">
+                A interface da NIA está disponível aqui. A integração com a
+                inteligência artificial será tratada separadamente.
+              </p>
 
-                  <p className="mt-2">
-                    Pensando em uma resposta...
-                  </p>
-                </div>
-              )}
-
-              {!loading && error && (
-                <div className="rounded-2xl border border-red-200 bg-red-50 p-5 text-red-700">
-                  {error}
-                </div>
-              )}
-
-              {!loading && !error && answer && (
-                <div className="rounded-2xl bg-slate-50 p-5">
-                  <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#5a7690]">
-                    Resposta da NIA
-                  </p>
-
-                  <p className="mt-3 whitespace-pre-line leading-7 text-slate-700">
-                    {answer}
-                  </p>
-                </div>
-              )}
-
-              {!loading && !error && !answer && (
-                <div className="rounded-2xl bg-[#f7f5ef] p-5 text-slate-600">
-                  <p className="leading-7">
-                    Faça uma pergunta sobre aprendizagem, leitura, estudo,
-                    organização ou estratégias de apoio educativo.
-                  </p>
-                </div>
-              )}
-            </div>
-
-            {/* PERGUNTA */}
-            <form
-              onSubmit={sendQuestion}
-              className="border-t border-slate-200 px-6 py-5 md:px-7"
-            >
-              <label
-                htmlFor="nia-question"
-                className="text-sm font-bold text-slate-700"
-              >
-                Sua pergunta
-              </label>
-
-              <div className="mt-3 flex gap-3">
-                <textarea
-                  id="nia-question"
-                  value={question}
-                  onChange={(event) => setQuestion(event.target.value)}
-                  onKeyDown={handleKeyDown}
-                  disabled={loading}
-                  rows={2}
-                  placeholder="Digite uma dúvida..."
-                  className="min-h-[76px] flex-1 resize-none rounded-2xl border border-slate-200 px-4 py-3 text-base text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-[#24557b] focus:ring-2 focus:ring-[#24557b]/10 disabled:bg-slate-50"
-                />
-
+              <div className="mt-6 flex justify-end">
                 <button
-                  type="submit"
-                  disabled={loading || !question.trim()}
-                  aria-label="Enviar pergunta"
-                  className="h-[76px] w-[64px] shrink-0 rounded-2xl bg-[#24557b] text-2xl text-white transition hover:bg-[#1c4667] disabled:cursor-not-allowed disabled:opacity-40"
+                  type="button"
+                  onClick={() => setNiaOpen(false)}
+                  className="btn btn-soft"
                 >
-                  →
+                  Voltar ao site
                 </button>
               </div>
-
-              <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
-                <p className="text-xs text-slate-400">
-                  Enter envia · Shift + Enter cria uma nova linha
-                </p>
-
-                <div className="flex gap-2">
-                  {(answer || error) && (
-                    <button
-                      type="button"
-                      onClick={newQuestion}
-                      className="rounded-xl px-4 py-2 text-sm font-bold text-slate-600 transition hover:bg-slate-100"
-                    >
-                      Nova pergunta
-                    </button>
-                  )}
-
-                  <button
-                    type="button"
-                    onClick={closeChat}
-                    className="rounded-xl bg-slate-100 px-4 py-2 text-sm font-bold text-slate-700 transition hover:bg-slate-200"
-                  >
-                    Voltar ao site
-                  </button>
-                </div>
-              </div>
-
-              <p className="mt-4 text-center text-xs leading-5 text-slate-400">
-                A NIA tem finalidade educativa e não substitui avaliação ou
-                acompanhamento profissional.
-              </p>
-            </form>
+            </div>
           </div>
         </div>
       )}

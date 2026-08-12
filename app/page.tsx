@@ -1,650 +1,350 @@
- "use client";
-
-import { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
-import {
-  Accessibility,
-  ArrowRight,
-  BookOpen,
-  Brain,
-  HeartHandshake,
-  Menu,
-  MessageCircle,
-  X,
-} from "lucide-react";
-
-const navItems = [
-  ["Entenda a dislexia", "/estudo/dislexia"],
-  ["Famosos", "/famosos"],
-  ["Biblioteca", "/biblioteca"],
-  ["Ajuda", "/ajuda"],
-  ["NIA", "#nia"],
-  ["Sobre", "/sobre"],
-] as const;
-
-function AccessibilityPanel({
-  open,
-  onClose,
-}: {
-  open: boolean;
-  onClose: () => void;
-}) {
-  const [largeText, setLargeText] = useState(false);
-  const [highContrast, setHighContrast] = useState(false);
-  const [reducedMotion, setReducedMotion] = useState(false);
-
-  useEffect(() => {
-    document.documentElement.classList.toggle("large-text", largeText);
-    document.documentElement.classList.toggle("high-contrast", highContrast);
-    document.documentElement.classList.toggle("reduce-motion", reducedMotion);
-
-    return () => {
-      document.documentElement.classList.remove(
-        "large-text",
-        "high-contrast",
-        "reduce-motion"
-      );
-    };
-  }, [largeText, highContrast, reducedMotion]);
-
-  if (!open) return null;
-
-  return (
-    <div
-      className="fixed inset-0 z-[100] bg-[#173a56]/45 p-4 backdrop-blur-sm"
-      onMouseDown={onClose}
-      role="presentation"
-    >
-      <aside
-        className="mx-auto mt-20 w-full max-w-md rounded-[28px] bg-white p-7 shadow-2xl"
-        onMouseDown={(event) => event.stopPropagation()}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="accessibility-title"
-      >
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <p className="eyebrow">Acessibilidade</p>
-            <h2
-              id="accessibility-title"
-              className="mt-2 text-2xl font-bold text-[#234f73]"
-            >
-              Ajuste sua leitura
-            </h2>
-          </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="icon-button"
-            aria-label="Fechar acessibilidade"
-          >
-            <X size={22} />
-          </button>
-        </div>
-
-        <div className="mt-7 grid gap-3">
-          <button
-            type="button"
-            className="access-option"
-            onClick={() => setLargeText((value) => !value)}
-          >
-            <span>Texto maior</span>
-            <strong>{largeText ? "Ativo" : "Inativo"}</strong>
-          </button>
-
-          <button
-            type="button"
-            className="access-option"
-            onClick={() => setHighContrast((value) => !value)}
-          >
-            <span>Alto contraste</span>
-            <strong>{highContrast ? "Ativo" : "Inativo"}</strong>
-          </button>
-
-          <button
-            type="button"
-            className="access-option"
-            onClick={() => setReducedMotion((value) => !value)}
-          >
-            <span>Reduzir animações</span>
-            <strong>{reducedMotion ? "Ativo" : "Inativo"}</strong>
-          </button>
-
-          <button
-            type="button"
-            className="btn btn-blue mt-2"
-            onClick={() => {
-              setLargeText(false);
-              setHighContrast(false);
-              setReducedMotion(false);
-            }}
-          >
-            Restaurar padrão
-          </button>
-        </div>
-      </aside>
-    </div>
-  );
-}
-
-function NiaModal({
-  open,
-  onClose,
-}: {
-  open: boolean;
-  onClose: () => void;
-}) {
-  const [question, setQuestion] = useState("");
-  const [answer, setAnswer] = useState(
-    "Olá! Sou a NIA. Faça uma pergunta sobre aprendizagem, leitura, estudo ou estratégias de apoio."
-  );
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  async function askNia() {
-    const trimmed = question.trim();
-
-    if (!trimmed) {
-      setError("Digite uma pergunta.");
-      return;
-    }
-
-    setLoading(true);
-    setError("");
-
-    try {
-      const response = await fetch("/api/nia", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ question: trimmed }),
-      });
-
-      const data = await response.json().catch(() => ({}));
-
-      if (!response.ok) {
-        throw new Error(
-          data?.error || "Não foi possível obter uma resposta agora."
-        );
-      }
-
-      setAnswer(
-        data?.answer ||
-          "Não consegui preparar uma resposta agora. Tente novamente."
-      );
-    } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Não foi possível obter uma resposta agora."
-      );
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  function newQuestion() {
-    setQuestion("");
-    setError("");
-    setAnswer(
-      "Olá! Sou a NIA. Faça uma pergunta sobre aprendizagem, leitura, estudo ou estratégias de apoio."
-    );
-  }
-
-  useEffect(() => {
-    if (!open) return;
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onClose();
-    };
-
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [open, onClose]);
-
-  if (!open) return null;
-
-  return (
-    <div
-      className="fixed inset-0 z-[110] bg-[#173a56]/55 p-4 backdrop-blur-sm"
-      onMouseDown={onClose}
-      role="presentation"
-    >
-      <div
-        className="nia-modal"
-        onMouseDown={(event) => event.stopPropagation()}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="nia-title"
-      >
-        <div className="nia-modal-header">
-          <div>
-            <p className="eyebrow">NIA</p>
-            <h2 id="nia-title" className="mt-2 text-3xl font-bold text-[#234f73]">
-              Como posso apoiar sua dúvida?
-            </h2>
-          </div>
-
-          <button
-            type="button"
-            onClick={onClose}
-            className="icon-button"
-            aria-label="Fechar NIA"
-          >
-            <X size={23} />
-          </button>
-        </div>
-
-        <div className="nia-modal-body">
-          <div className="nia-answer">
-            <span className="nia-answer-label">Resposta da NIA</span>
-            {loading ? (
-              <p className="mt-3 text-[#234f73]">Pensando...</p>
-            ) : (
-              <p className="mt-3 whitespace-pre-wrap leading-7 text-[#31465a]">
-                {answer}
-              </p>
-            )}
-          </div>
-
-          {error && (
-            <div className="nia-error" role="alert">
-              {error}
-            </div>
-          )}
-
-          <label
-            htmlFor="nia-question"
-            className="mt-7 block text-sm font-bold text-[#31465a]"
-          >
-            Sua pergunta
-          </label>
-
-          <div className="mt-2 flex gap-3">
-            <textarea
-              id="nia-question"
-              value={question}
-              onChange={(event) => setQuestion(event.target.value)}
-              onKeyDown={(event) => {
-                if (event.key === "Enter" && !event.shiftKey) {
-                  event.preventDefault();
-                  void askNia();
-                }
-              }}
-              placeholder="Ex.: Como posso ajudar uma criança que se frustra ao ler?"
-              className="nia-input min-h-[88px]"
-              disabled={loading}
-              aria-describedby="nia-hint"
-            />
-
-            <button
-              type="button"
-              onClick={() => void askNia()}
-              className="nia-send"
-              disabled={loading}
-              aria-label="Enviar pergunta"
-            >
-              <ArrowRight size={24} />
-            </button>
-          </div>
-
-          <p id="nia-hint" className="mt-2 text-xs text-[#8299ad]">
-            Enter envia · Shift + Enter cria uma nova linha
-          </p>
-
-          <div className="mt-4 flex flex-wrap justify-end gap-3">
-            <button type="button" onClick={newQuestion} className="btn btn-soft">
-              Nova pergunta
-            </button>
-            <button type="button" onClick={onClose} className="btn btn-soft">
-              Voltar ao site
-            </button>
-          </div>
-
-          <p className="mt-5 text-center text-xs leading-5 text-[#8299ad]">
-            A NIA possui finalidade educativa e não substitui avaliação ou
-            acompanhamento profissional.
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function Header({
-  onNia,
-  onAccessibility,
-}: {
-  onNia: () => void;
-  onAccessibility: () => void;
-}) {
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  function goToNia() {
-    setMenuOpen(false);
-    onNia();
-  }
-
-  return (
-    <header className="sticky top-0 z-50 border-b border-[#dce8ef] bg-white/95 backdrop-blur-xl">
-      <div className="container flex min-h-[82px] items-center justify-between gap-5">
-        <Link href="/" className="shrink-0" aria-label="DysHelp — início">
-          <img
-            src="/logo.png"
-            alt="DysHelp"
-            className="h-[58px] w-auto object-contain"
-          />
-        </Link>
-
-        <nav className="hidden items-center gap-6 lg:flex" aria-label="Principal">
-          {navItems.map(([label, href]) =>
-            href === "#nia" ? (
-              <button
-                key={label}
-                type="button"
-                onClick={onNia}
-                className="nav-link"
-              >
-                {label}
-              </button>
-            ) : (
-              <Link key={label} href={href} className="nav-link">
-                {label}
-              </Link>
-            )
-          )}
-        </nav>
-
-        <div className="hidden items-center gap-3 lg:flex">
-          <button
-            type="button"
-            onClick={onAccessibility}
-            className="accessibility-button"
-          >
-            <Accessibility size={18} />
-            Acessibilidade
-          </button>
-        </div>
-
-        <button
-          type="button"
-          className="icon-button lg:hidden"
-          onClick={() => setMenuOpen((value) => !value)}
-          aria-label={menuOpen ? "Fechar menu" : "Abrir menu"}
-          aria-expanded={menuOpen}
-        >
-          {menuOpen ? <X size={25} /> : <Menu size={25} />}
-        </button>
-      </div>
-
-      {menuOpen && (
-        <div className="border-t border-[#e7eef3] bg-white px-5 py-5 lg:hidden">
-          <nav className="container grid gap-2" aria-label="Menu móvel">
-            {navItems.map(([label, href]) =>
-              href === "#nia" ? (
-                <button
-                  key={label}
-                  type="button"
-                  onClick={goToNia}
-                  className="mobile-nav-link"
-                >
-                  {label}
-                </button>
-              ) : (
-                <Link
-                  key={label}
-                  href={href}
-                  onClick={() => setMenuOpen(false)}
-                  className="mobile-nav-link"
-                >
-                  {label}
-                </Link>
-              )
-            )}
-
-            <button
-              type="button"
-              onClick={() => {
-                setMenuOpen(false);
-                onAccessibility();
-              }}
-              className="mobile-nav-link text-left"
-            >
-              Acessibilidade
-            </button>
-          </nav>
-        </div>
-      )}
-    </header>
-  );
-}
 
 export default function Home() {
-  const [niaOpen, setNiaOpen] = useState(false);
-  const [accessibilityOpen, setAccessibilityOpen] = useState(false);
-
   return (
-    <main className="min-h-screen bg-white">
-      <Header
-        onNia={() => setNiaOpen(true)}
-        onAccessibility={() => setAccessibilityOpen(true)}
-      />
+    <main className="min-h-screen bg-[#F3EAD9] text-[#6997B8]">
 
-      <section id="inicio" className="hero-section">
-        <div className="container grid items-center gap-12 py-14 md:grid-cols-[0.9fr_1.1fr] md:py-20">
-          <div className="hero-copy">
-            <p className="eyebrow">Informação · acolhimento · apoio</p>
+      {/* CABEÇALHO */}
+      <header className="sticky top-0 z-50 border-b border-[#6997B8]/20 bg-[#F3EAD9]/95 backdrop-blur">
+        <div className="mx-auto flex min-h-[78px] max-w-7xl items-center justify-between px-6">
 
-            <h1 className="display-title mt-5">
+          {/* LOGO */}
+          <Link href="/" className="flex items-center">
+            <Image
+              src="/DISLEXIA (1).png"
+              alt="DysHelp"
+              width={150}
+              height={80}
+              priority
+              className="h-auto w-[125px] object-contain"
+            />
+          </Link>
+
+          {/* MENU */}
+          <nav className="hidden items-center gap-8 md:flex">
+            <Link
+              href="/"
+              className="font-semibold text-[#6997B8] transition hover:text-[#F3A05B]"
+            >
+              Início
+            </Link>
+
+            <Link
+              href="/estudo/dislexia"
+              className="font-semibold text-[#6997B8] transition hover:text-[#F3A05B]"
+            >
+              Dislexia
+            </Link>
+
+            <Link
+              href="/atividades"
+              className="font-semibold text-[#6997B8] transition hover:text-[#F3A05B]"
+            >
+              Atividades
+            </Link>
+
+            <Link
+              href="/profissionais"
+              className="font-semibold text-[#6997B8] transition hover:text-[#F3A05B]"
+            >
+              Profissionais
+            </Link>
+
+            <Link
+              href="/ajuda"
+              className="font-semibold text-[#6997B8] transition hover:text-[#F3A05B]"
+            >
+              Ajuda
+            </Link>
+          </nav>
+
+          {/* NIA */}
+          <Link
+            href="/nia"
+            className="rounded-2xl bg-[#6997B8] px-6 py-3 font-bold text-white transition hover:bg-[#F3A05B]"
+          >
+            NIA
+          </Link>
+        </div>
+      </header>
+
+
+      {/* MENU SECUNDÁRIO */}
+      <div className="border-b border-[#6997B8]/20 bg-white">
+        <div className="mx-auto flex min-h-[86px] max-w-7xl items-center justify-between gap-6 px-6">
+
+          <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
+            <Link
+              href="/estudo/dislexia"
+              className="font-semibold text-[#6997B8] hover:text-[#F3A05B]"
+            >
+              Entenda a dislexia
+            </Link>
+
+            <Link
+              href="/famosos"
+              className="font-semibold text-[#6997B8] hover:text-[#F3A05B]"
+            >
+              Famosos
+            </Link>
+
+            <Link
+              href="/biblioteca"
+              className="font-semibold text-[#6997B8] hover:text-[#F3A05B]"
+            >
+              Biblioteca
+            </Link>
+
+            <Link
+              href="/ajuda"
+              className="font-semibold text-[#6997B8] hover:text-[#F3A05B]"
+            >
+              Ajuda
+            </Link>
+
+            <Link
+              href="/nia"
+              className="font-semibold text-[#6997B8] hover:text-[#F3A05B]"
+            >
+              NIA
+            </Link>
+
+            <Link
+              href="/sobre"
+              className="font-semibold text-[#6997B8] hover:text-[#F3A05B]"
+            >
+              Sobre
+            </Link>
+          </div>
+
+          <button
+            type="button"
+            className="hidden rounded-full border-2 border-[#6997B8] px-6 py-3 font-bold text-[#6997B8] transition hover:bg-[#6997B8] hover:text-white md:block"
+          >
+            ♿ Acessibilidade
+          </button>
+
+        </div>
+      </div>
+
+
+      {/* HERO */}
+      <section className="bg-white">
+        <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 py-20 md:grid-cols-2 md:py-28">
+
+          {/* TEXTO */}
+          <div>
+
+            <p className="text-sm font-bold tracking-[0.18em] text-[#6997B8]">
+              INFORMAÇÃO · ACOLHIMENTO · APOIO
+            </p>
+
+            <h1 className="mt-6 font-serif text-5xl font-bold leading-[0.95] tracking-tight text-[#6997B8] md:text-7xl">
               Compreender,
               <br />
-              acolher, <span>apoiar.</span>
+              acolher,
+              <br />
+              <span className="text-[#F3A05B]">apoiar.</span>
             </h1>
 
-            <div className="orange-line" />
+            <div className="mt-8 h-1 w-14 rounded-full bg-[#F3A05B]" />
 
-            <p className="hero-text">
-              Informação de qualidade e recursos acessíveis para pessoas com
-              dislexia, famílias, profissionais e todos que querem fazer a
-              diferença.
+            <p className="mt-8 max-w-xl text-lg leading-8 text-[#6997B8]">
+              Informação de qualidade e recursos acessíveis para pessoas
+              com dislexia, famílias, profissionais e todos que querem
+              fazer a diferença.
             </p>
 
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link href="/estudo/dislexia" className="btn btn-blue">
-                Entenda a dislexia
-                <ArrowRight size={19} />
+            <div className="mt-8 flex flex-wrap gap-4">
+
+              <Link
+                href="/estudo/dislexia"
+                className="rounded-xl bg-[#6997B8] px-6 py-4 font-bold text-white transition hover:bg-[#F3A05B]"
+              >
+                Entender a dislexia
               </Link>
 
-              <button
-                type="button"
-                onClick={() => setNiaOpen(true)}
-                className="btn btn-outline-orange"
+              <Link
+                href="/nia"
+                className="rounded-xl border-2 border-[#6997B8] px-6 py-4 font-bold text-[#6997B8] transition hover:bg-[#BAD8E8]"
               >
-                Fale com a NIA
-                <MessageCircle size={18} />
-              </button>
+                Conversar com a NIA
+              </Link>
+
             </div>
           </div>
 
-          <div className="hero-art-wrap">
-            <img
-              src="/hero-illustration.png"
-              alt="Ilustração de uma criança lendo com tranquilidade"
-              className="hero-art"
-            />
+
+          {/* IMAGEM DA CRIANÇA */}
+          <div className="relative flex justify-center">
+
+            <div className="relative w-full max-w-xl overflow-hidden rounded-[40px] bg-[#BAD8E8]/50 p-5">
+
+              <div className="absolute right-8 top-8 h-16 w-16 rounded-full bg-[#F3A05B]" />
+
+              <div className="absolute bottom-8 left-8 h-20 w-20 rounded-full bg-[#BAD8E8]" />
+
+              <Image
+                src="/DISLEXIA (1).png"
+                alt="Criança estudando e lendo com tranquilidade"
+                width={900}
+                height={700}
+                priority
+                className="relative z-10 h-auto w-full rounded-[30px] object-contain"
+              />
+
+            </div>
+
           </div>
+
         </div>
       </section>
 
-      <section className="cream-section py-7 md:py-10">
-        <div className="container grid gap-5 md:grid-cols-3">
-          <article className="feature-card">
-            <div className="feature-icon blue">
-              <BookOpen size={34} />
-            </div>
-            <h2>Entenda a dislexia</h2>
-            <p>
-              Conheça a dislexia, suas características e diferentes formas de
-              aprendizagem.
+
+      {/* LUGARES DE APOIO */}
+      <section className="bg-white px-6 py-20">
+
+        <div className="mx-auto max-w-7xl">
+
+          <div className="text-center">
+
+            <p className="text-sm font-bold tracking-[0.18em] text-[#6997B8]">
+              RECURSOS
             </p>
-            <Link href="/estudo/dislexia" className="card-link">
-              Saiba mais <ArrowRight size={17} />
-            </Link>
-          </article>
 
-          <article className="feature-card">
-            <div className="feature-icon orange">
-              <HeartHandshake size={34} />
-            </div>
-            <h2 className="orange-title">Para responsáveis</h2>
-            <p>
-              Estratégias e informações para famílias e pessoas que acompanham
-              crianças e jovens.
-            </p>
-            <Link href="/responsaveis" className="card-link orange-link">
-              Acessar <ArrowRight size={17} />
-            </Link>
-          </article>
-
-          <article className="feature-card">
-            <div className="feature-icon blue">
-              <Brain size={34} />
-            </div>
-            <h2>Para profissionais</h2>
-            <p>
-              Materiais e caminhos para profissionais que trabalham com
-              aprendizagem.
-            </p>
-            <Link href="/profissionais#gerador" className="card-link">
-              Acessar <ArrowRight size={17} />
-            </Link>
-          </article>
-        </div>
-      </section>
-
-      <section className="about-section">
-        <div className="container grid items-center gap-10 md:grid-cols-[1fr_.9fr]">
-          <div>
-            <p className="eyebrow">Conhecimento para compreender</p>
-            <h2 className="section-title mt-4">Sobre a dislexia</h2>
-            <div className="orange-line" />
-            <p className="section-text">
-              A dislexia é uma variação de aprendizagem que pode afetar
-              habilidades de leitura, escrita e soletração. Com informação,
-              acolhimento e estratégias adequadas, é possível aprender e se
-              desenvolver de muitas maneiras.
-            </p>
-            <Link href="/estudo/dislexia" className="btn btn-blue mt-7">
-              Saiba mais sobre a dislexia
-              <ArrowRight size={19} />
-            </Link>
-          </div>
-
-          <div className="about-art-wrap">
-            <img
-              src="/section-illustration.png"
-              alt=""
-              className="about-art"
-              aria-hidden="true"
-            />
-          </div>
-        </div>
-      </section>
-
-      <section id="nia" className="nia-section">
-        <div className="container grid items-center gap-10 md:grid-cols-[.8fr_1.2fr]">
-          <div className="text-white">
-            <p className="eyebrow text-[#BAD8E8]">NIA · Núcleo de Inteligência e Apoio</p>
-            <h2 className="mt-4 text-4xl font-bold md:text-5xl">
-              Transforme dúvidas em caminhos possíveis.
+            <h2 className="mt-3 font-serif text-4xl font-bold text-[#6997B8] md:text-5xl">
+              Lugares de apoio suplementares
             </h2>
-            <p className="mt-5 max-w-xl text-lg leading-8 text-white/80">
-              Uma ferramenta de apoio educativo para dúvidas sobre
-              aprendizagem, leitura, estudo e estratégias de apoio.
+
+            <p className="mx-auto mt-5 max-w-2xl leading-7 text-[#6997B8]/80">
+              Encontre caminhos complementares para ampliar o conhecimento,
+              buscar apoio e desenvolver estratégias para lidar com a dislexia.
             </p>
-            <button
-              type="button"
-              onClick={() => setNiaOpen(true)}
-              className="btn btn-orange mt-7"
-            >
-              Conversar com a NIA
-              <MessageCircle size={18} />
-            </button>
+
           </div>
 
-          <div className="nia-preview">
-            <div className="nia-preview-head">
-              <div className="nia-avatar">N</div>
-              <div>
-                <strong>NIA</strong>
-                <span>Apoio educativo</span>
+
+          {/* CARDS */}
+          <div className="mt-12 grid gap-6 md:grid-cols-3">
+
+            {/* CARD 1 */}
+            <article className="flex h-full flex-col rounded-3xl border border-[#6997B8]/20 bg-[#BAD8E8]/30 p-8">
+
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-3xl">
+                ♡
               </div>
-            </div>
 
-            <div className="nia-bubble user">
-              Meu filho fica frustrado quando precisa ler. Como posso ajudar?
-            </div>
+              <h3 className="mt-6 text-2xl font-bold text-[#6997B8]">
+                Clínicas e Terapias
+              </h3>
 
-            <div className="nia-bubble">
-              Podemos pensar em pequenas etapas, pausas e estratégias que
-              tornem a atividade mais previsível e confortável.
-            </div>
+              <p className="mt-4 flex-1 leading-7 text-[#6997B8]/90">
+                Informações para quem busca acompanhamento especializado
+                e orientação profissional.
+              </p>
 
-            <button
-              type="button"
-              onClick={() => setNiaOpen(true)}
-              className="nia-preview-button"
-            >
-              Fazer uma pergunta <ArrowRight size={18} />
-            </button>
+              <Link
+                href="/profissionais"
+                className="mt-6 font-bold text-[#6997B8] hover:text-[#F3A05B]"
+              >
+                Ver profissionais →
+              </Link>
+
+            </article>
+
+
+            {/* CARD 2 */}
+            <article className="flex h-full flex-col rounded-3xl border border-[#F3A05B]/30 bg-[#F3EAD9] p-8">
+
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-3xl">
+                ▢
+              </div>
+
+              <h3 className="mt-6 text-2xl font-bold text-[#F3A05B]">
+                Cursos e Formação
+              </h3>
+
+              <p className="mt-4 flex-1 leading-7 text-[#6997B8]/90">
+                Materiais e caminhos para profissionais aprofundarem
+                seus conhecimentos sobre dislexia.
+              </p>
+
+              <Link
+                href="/profissionais"
+                className="mt-6 font-bold text-[#F3A05B] hover:text-[#6997B8]"
+              >
+                Ver recursos →
+              </Link>
+
+            </article>
+
+
+            {/* CARD 3 */}
+            <article className="flex h-full flex-col rounded-3xl border border-[#6997B8]/20 bg-[#BAD8E8]/30 p-8">
+
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-3xl">
+                ♧
+              </div>
+
+              <h3 className="mt-6 text-2xl font-bold text-[#6997B8]">
+                Grupos de Apoio
+              </h3>
+
+              <p className="mt-4 flex-1 leading-7 text-[#6997B8]/90">
+                Conheça espaços de convivência, troca de experiências
+                e apoio para famílias e pessoas com dislexia.
+              </p>
+
+              <Link
+                href="/ajuda"
+                className="mt-6 font-bold text-[#6997B8] hover:text-[#F3A05B]"
+              >
+                Conhecer opções →
+              </Link>
+
+            </article>
+
           </div>
+
         </div>
+
       </section>
 
-      <footer className="footer">
-        <div className="container grid gap-8 md:grid-cols-[1.2fr_.8fr_.8fr]">
+
+      {/* RODAPÉ */}
+      <footer className="border-t border-[#6997B8]/20 bg-[#F3EAD9]">
+
+        <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-10 md:flex-row md:items-center md:justify-between">
+
           <div>
-            <img src="/logo.png" alt="DysHelp" className="h-[64px] w-auto" />
-            <p className="mt-4 max-w-md text-sm leading-7 text-white/75">
-              Compreender. Acolher. Apoiar. Informação de qualidade e recursos
-              acessíveis sobre dislexia.
+            <p className="font-bold text-[#6997B8]">
+              DysHelp
+            </p>
+
+            <p className="mt-1 text-sm text-[#6997B8]/70">
+              Compreender. Acolher. Apoiar.
             </p>
           </div>
 
-          <div>
-            <h2 className="footer-title">Explorar</h2>
-            <div className="footer-links">
-              <Link href="/estudo/dislexia">Entenda a dislexia</Link>
-              <Link href="/famosos">Famosos</Link>
-              <Link href="/biblioteca">Biblioteca</Link>
-              <Link href="/ajuda">Ajuda</Link>
-            </div>
+          <div className="flex flex-wrap gap-5 text-sm font-semibold">
+            <Link href="/sobre" className="hover:text-[#F3A05B]">
+              Sobre
+            </Link>
+
+            <Link href="/ajuda" className="hover:text-[#F3A05B]">
+              Ajuda
+            </Link>
+
+            <Link href="/nia" className="hover:text-[#F3A05B]">
+              NIA
+            </Link>
           </div>
 
-          <div>
-            <h2 className="footer-title">Apoio</h2>
-            <div className="footer-links">
-              <Link href="/profissionais#gerador">Gerador de Atividades</Link>
-              <button type="button" onClick={() => setNiaOpen(true)}>
-                NIA
-              </button>
-              <Link href="/sobre">Sobre</Link>
-            </div>
-          </div>
         </div>
 
-        <div className="container mt-10 border-t border-white/15 pt-6 text-sm text-white/60">
-          © 2026 DysHelp — Conteúdo educativo.
-        </div>
       </footer>
 
-      <AccessibilityPanel
-        open={accessibilityOpen}
-        onClose={() => setAccessibilityOpen(false)}
-      />
-
-      <NiaModal open={niaOpen} onClose={() => setNiaOpen(false)} />
     </main>
   );
 }

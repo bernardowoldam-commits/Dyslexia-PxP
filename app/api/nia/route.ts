@@ -18,52 +18,53 @@ export async function POST(request: Request) {
       console.error("OPENAI_API_KEY não configurada.");
 
       return NextResponse.json(
-        { error: "A chave da API não está configurada no servidor." },
+        { error: "A NIA não está configurada corretamente no servidor." },
         { status: 500 }
       );
     }
 
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`,
-      },
-      body: JSON.stringify({
-        model: "gpt-5.6-luna",
-
-        messages: [
-          {
-            role: "system",
-            content: `
+    const response = await fetch(
+      "https://api.openai.com/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify({
+          model: "gpt-5.6-luna",
+          messages: [
+            {
+              role: "system",
+              content: `
 Você é a NIA — Núcleo de Inteligência e Apoio do projeto Dyslexia Tortuguitas.
 
-Sua função é oferecer apoio educativo, acolhedor e objetivo sobre aprendizagem, leitura, estudo e estratégias de apoio.
+Sua função é oferecer apoio educativo sobre aprendizagem, leitura, estudo e estratégias de apoio.
+
+Responda sempre em português do Brasil.
 
 REGRAS:
-- Responda sempre em português do Brasil.
-- Seja acolhedora, clara e simples.
-- Responda em no máximo 80 palavras.
+- Seja acolhedora, clara e objetiva.
+- Use linguagem simples e acessível.
+- Responda de forma curta.
+- Dê preferência a respostas de 2 a 5 frases.
 - Não faça diagnósticos.
 - Não prescreva medicamentos.
 - Não prometa cura.
 - Não substitua profissionais.
-- Quando necessário, recomende avaliação ou acompanhamento profissional.
-- Evite respostas excessivamente longas.
-- Dê orientações práticas quando apropriado.
-            `.trim(),
-          },
-          {
-            role: "user",
-            content: question,
-          },
-        ],
-
-        temperature: 0.4,
-
-        max_completion_tokens: 180,
-      }),
-    });
+- Quando a pergunta envolver avaliação, saúde ou terapia, recomende procurar um profissional adequado.
+- Quando possível, ofereça uma orientação prática.
+- Não repita o aviso sobre profissionais em toda resposta se ele não for necessário.
+              `.trim(),
+            },
+            {
+              role: "user",
+              content: question,
+            },
+          ],
+        }),
+      }
+    );
 
     const data = await response.json();
 
@@ -76,13 +77,23 @@ REGRAS:
             data?.error?.message ||
             "A NIA não conseguiu responder agora.",
         },
-        { status: response.status }
+        { status: 500 }
       );
     }
 
     const answer =
-      data?.choices?.[0]?.message?.content?.trim() ||
-      "Não consegui preparar uma resposta agora. Tente novamente.";
+      data?.choices?.[0]?.message?.content?.trim() || "";
+
+    if (!answer) {
+      console.error("OPENAI API: resposta vazia.", data);
+
+      return NextResponse.json(
+        {
+          error: "A NIA recebeu a pergunta, mas não retornou uma resposta.",
+        },
+        { status: 500 }
+      );
+    }
 
     return NextResponse.json({ answer });
   } catch (error) {
@@ -90,7 +101,7 @@ REGRAS:
 
     return NextResponse.json(
       {
-        error: "Erro interno ao preparar a resposta da NIA.",
+        error: "Não foi possível conectar à NIA agora.",
       },
       { status: 500 }
     );

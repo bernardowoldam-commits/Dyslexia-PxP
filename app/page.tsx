@@ -1,5 +1,7 @@
-"use client";
+ "use client";
 
+import { useEffect, useState } from "react";
+import Link from "next/link";
 import {
   Accessibility,
   ArrowRight,
@@ -7,518 +9,642 @@ import {
   Brain,
   HeartHandshake,
   Menu,
-  ShieldCheck,
-  Sparkles,
+  MessageCircle,
   X,
 } from "lucide-react";
-import { useEffect, useState } from "react";
 
-const paths: Array<
-  [string, string, React.ElementType, string]
-> = [
-  [
-    "estudo/dislexia",
-    "Entenda a dislexia",
-    BookOpen,
-    "Conheça a dislexia, suas características e diferentes formas de aprendizagem.",
-  ],
-  [
-    "responsaveis",
-    "Para responsáveis",
-    HeartHandshake,
-    "Estratégias e informações para famílias e pessoas que acompanham crianças e jovens.",
-  ],
-  [
-    "profissionais",
-    "Para profissionais",
-    Brain,
-    "Materiais e caminhos para profissionais que trabalham com aprendizagem.",
-  ],
-];
+const navItems = [
+  ["Entenda a dislexia", "/estudo/dislexia"],
+  ["Famosos", "/famosos"],
+  ["Biblioteca", "/biblioteca"],
+  ["Ajuda", "/ajuda"],
+  ["NIA", "#nia"],
+  ["Sobre", "/sobre"],
+] as const;
 
-function Header() {
-  const [open, setOpen] = useState(false);
+function AccessibilityPanel({
+  open,
+  onClose,
+}: {
+  open: boolean;
+  onClose: () => void;
+}) {
+  const [largeText, setLargeText] = useState(false);
+  const [highContrast, setHighContrast] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(false);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("large-text", largeText);
+    document.documentElement.classList.toggle("high-contrast", highContrast);
+    document.documentElement.classList.toggle("reduce-motion", reducedMotion);
+
+    return () => {
+      document.documentElement.classList.remove(
+        "large-text",
+        "high-contrast",
+        "reduce-motion"
+      );
+    };
+  }, [largeText, highContrast, reducedMotion]);
+
+  if (!open) return null;
 
   return (
-    <header className="sticky top-0 z-50 border-b bg-white/95 backdrop-blur">
-      <div className="container flex h-20 items-center justify-between">
-        <a
-          href="/"
-          className="text-xl font-extrabold tracking-tight text-deep"
-        >
-          Dyslexia Tortuguitas
-        </a>
+    <div
+      className="fixed inset-0 z-[100] bg-[#173a56]/45 p-4 backdrop-blur-sm"
+      onMouseDown={onClose}
+      role="presentation"
+    >
+      <aside
+        className="mx-auto mt-20 w-full max-w-md rounded-[28px] bg-white p-7 shadow-2xl"
+        onMouseDown={(event) => event.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="accessibility-title"
+      >
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <p className="eyebrow">Acessibilidade</p>
+            <h2
+              id="accessibility-title"
+              className="mt-2 text-2xl font-bold text-[#234f73]"
+            >
+              Ajuste sua leitura
+            </h2>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="icon-button"
+            aria-label="Fechar acessibilidade"
+          >
+            <X size={22} />
+          </button>
+        </div>
 
-        <nav className="hidden items-center gap-6 md:flex">
-          <a href="/estudo/dislexia" className="font-semibold">
-            Entenda a dislexia
-          </a>
-          <a href="/famosos" className="font-semibold">
-            Famosos
-          </a>
-          <a href="/biblioteca" className="font-semibold">
-            Biblioteca
-          </a>
-          <a href="/ajuda" className="font-semibold">
-            Ajuda
-          </a>
-          <a href="/nia" className="font-semibold">
-            NIA
-          </a>
-          <a href="/sobre" className="font-semibold">
-            Sobre
-          </a>
+        <div className="mt-7 grid gap-3">
+          <button
+            type="button"
+            className="access-option"
+            onClick={() => setLargeText((value) => !value)}
+          >
+            <span>Texto maior</span>
+            <strong>{largeText ? "Ativo" : "Inativo"}</strong>
+          </button>
+
+          <button
+            type="button"
+            className="access-option"
+            onClick={() => setHighContrast((value) => !value)}
+          >
+            <span>Alto contraste</span>
+            <strong>{highContrast ? "Ativo" : "Inativo"}</strong>
+          </button>
+
+          <button
+            type="button"
+            className="access-option"
+            onClick={() => setReducedMotion((value) => !value)}
+          >
+            <span>Reduzir animações</span>
+            <strong>{reducedMotion ? "Ativo" : "Inativo"}</strong>
+          </button>
+
+          <button
+            type="button"
+            className="btn btn-blue mt-2"
+            onClick={() => {
+              setLargeText(false);
+              setHighContrast(false);
+              setReducedMotion(false);
+            }}
+          >
+            Restaurar padrão
+          </button>
+        </div>
+      </aside>
+    </div>
+  );
+}
+
+function NiaModal({
+  open,
+  onClose,
+}: {
+  open: boolean;
+  onClose: () => void;
+}) {
+  const [question, setQuestion] = useState("");
+  const [answer, setAnswer] = useState(
+    "Olá! Sou a NIA. Faça uma pergunta sobre aprendizagem, leitura, estudo ou estratégias de apoio."
+  );
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  async function askNia() {
+    const trimmed = question.trim();
+
+    if (!trimmed) {
+      setError("Digite uma pergunta.");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await fetch("/api/nia", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ question: trimmed }),
+      });
+
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(
+          data?.error || "Não foi possível obter uma resposta agora."
+        );
+      }
+
+      setAnswer(
+        data?.answer ||
+          "Não consegui preparar uma resposta agora. Tente novamente."
+      );
+    } catch (err) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Não foi possível obter uma resposta agora."
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  function newQuestion() {
+    setQuestion("");
+    setError("");
+    setAnswer(
+      "Olá! Sou a NIA. Faça uma pergunta sobre aprendizagem, leitura, estudo ou estratégias de apoio."
+    );
+  }
+
+  useEffect(() => {
+    if (!open) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose();
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [open, onClose]);
+
+  if (!open) return null;
+
+  return (
+    <div
+      className="fixed inset-0 z-[110] bg-[#173a56]/55 p-4 backdrop-blur-sm"
+      onMouseDown={onClose}
+      role="presentation"
+    >
+      <div
+        className="nia-modal"
+        onMouseDown={(event) => event.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="nia-title"
+      >
+        <div className="nia-modal-header">
+          <div>
+            <p className="eyebrow">NIA</p>
+            <h2 id="nia-title" className="mt-2 text-3xl font-bold text-[#234f73]">
+              Como posso apoiar sua dúvida?
+            </h2>
+          </div>
+
+          <button
+            type="button"
+            onClick={onClose}
+            className="icon-button"
+            aria-label="Fechar NIA"
+          >
+            <X size={23} />
+          </button>
+        </div>
+
+        <div className="nia-modal-body">
+          <div className="nia-answer">
+            <span className="nia-answer-label">Resposta da NIA</span>
+            {loading ? (
+              <p className="mt-3 text-[#234f73]">Pensando...</p>
+            ) : (
+              <p className="mt-3 whitespace-pre-wrap leading-7 text-[#31465a]">
+                {answer}
+              </p>
+            )}
+          </div>
+
+          {error && (
+            <div className="nia-error" role="alert">
+              {error}
+            </div>
+          )}
+
+          <label
+            htmlFor="nia-question"
+            className="mt-7 block text-sm font-bold text-[#31465a]"
+          >
+            Sua pergunta
+          </label>
+
+          <div className="mt-2 flex gap-3">
+            <textarea
+              id="nia-question"
+              value={question}
+              onChange={(event) => setQuestion(event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" && !event.shiftKey) {
+                  event.preventDefault();
+                  void askNia();
+                }
+              }}
+              placeholder="Ex.: Como posso ajudar uma criança que se frustra ao ler?"
+              className="nia-input min-h-[88px]"
+              disabled={loading}
+              aria-describedby="nia-hint"
+            />
+
+            <button
+              type="button"
+              onClick={() => void askNia()}
+              className="nia-send"
+              disabled={loading}
+              aria-label="Enviar pergunta"
+            >
+              <ArrowRight size={24} />
+            </button>
+          </div>
+
+          <p id="nia-hint" className="mt-2 text-xs text-[#8299ad]">
+            Enter envia · Shift + Enter cria uma nova linha
+          </p>
+
+          <div className="mt-4 flex flex-wrap justify-end gap-3">
+            <button type="button" onClick={newQuestion} className="btn btn-soft">
+              Nova pergunta
+            </button>
+            <button type="button" onClick={onClose} className="btn btn-soft">
+              Voltar ao site
+            </button>
+          </div>
+
+          <p className="mt-5 text-center text-xs leading-5 text-[#8299ad]">
+            A NIA possui finalidade educativa e não substitui avaliação ou
+            acompanhamento profissional.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Header({
+  onNia,
+  onAccessibility,
+}: {
+  onNia: () => void;
+  onAccessibility: () => void;
+}) {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  function goToNia() {
+    setMenuOpen(false);
+    onNia();
+  }
+
+  return (
+    <header className="sticky top-0 z-50 border-b border-[#dce8ef] bg-white/95 backdrop-blur-xl">
+      <div className="container flex min-h-[82px] items-center justify-between gap-5">
+        <Link href="/" className="shrink-0" aria-label="DysHelp — início">
+          <img
+            src="/logo.png"
+            alt="DysHelp"
+            className="h-[58px] w-auto object-contain"
+          />
+        </Link>
+
+        <nav className="hidden items-center gap-6 lg:flex" aria-label="Principal">
+          {navItems.map(([label, href]) =>
+            href === "#nia" ? (
+              <button
+                key={label}
+                type="button"
+                onClick={onNia}
+                className="nav-link"
+              >
+                {label}
+              </button>
+            ) : (
+              <Link key={label} href={href} className="nav-link">
+                {label}
+              </Link>
+            )
+          )}
         </nav>
 
+        <div className="hidden items-center gap-3 lg:flex">
+          <button
+            type="button"
+            onClick={onAccessibility}
+            className="accessibility-button"
+          >
+            <Accessibility size={18} />
+            Acessibilidade
+          </button>
+        </div>
+
         <button
-          className="rounded-xl p-2 md:hidden"
-          onClick={() => setOpen(!open)}
-          aria-label="Abrir menu"
+          type="button"
+          className="icon-button lg:hidden"
+          onClick={() => setMenuOpen((value) => !value)}
+          aria-label={menuOpen ? "Fechar menu" : "Abrir menu"}
+          aria-expanded={menuOpen}
         >
-          {open ? <X size={26} /> : <Menu size={26} />}
+          {menuOpen ? <X size={25} /> : <Menu size={25} />}
         </button>
       </div>
 
-      {open && (
-        <nav className="border-t bg-white px-6 py-5 md:hidden">
-          <div className="container grid gap-4">
-            <a href="/estudo/dislexia">Entenda a dislexia</a>
-            <a href="/famosos">Famosos</a>
-            <a href="/biblioteca">Biblioteca</a>
-            <a href="/ajuda">Ajuda</a>
-            <a href="/nia">NIA</a>
-            <a href="/sobre">Sobre</a>
-          </div>
-        </nav>
+      {menuOpen && (
+        <div className="border-t border-[#e7eef3] bg-white px-5 py-5 lg:hidden">
+          <nav className="container grid gap-2" aria-label="Menu móvel">
+            {navItems.map(([label, href]) =>
+              href === "#nia" ? (
+                <button
+                  key={label}
+                  type="button"
+                  onClick={goToNia}
+                  className="mobile-nav-link"
+                >
+                  {label}
+                </button>
+              ) : (
+                <Link
+                  key={label}
+                  href={href}
+                  onClick={() => setMenuOpen(false)}
+                  className="mobile-nav-link"
+                >
+                  {label}
+                </Link>
+              )
+            )}
+
+            <button
+              type="button"
+              onClick={() => {
+                setMenuOpen(false);
+                onAccessibility();
+              }}
+              className="mobile-nav-link text-left"
+            >
+              Acessibilidade
+            </button>
+          </nav>
+        </div>
       )}
     </header>
   );
 }
 
-function AccessibilityPanel() {
-  const [open, setOpen] = useState(false);
-  const [large, setLarge] = useState(false);
-  const [contrast, setContrast] = useState(false);
-  const [motion, setMotion] = useState(false);
-
-  useEffect(() => {
-    document.documentElement.classList.toggle("large-text", large);
-    document.documentElement.classList.toggle("contrast", contrast);
-    document.documentElement.classList.toggle("no-motion", motion);
-  }, [large, contrast, motion]);
-
-  return (
-    <>
-      <button
-        onClick={() => setOpen(true)}
-        className="btn btn-soft"
-      >
-        <Accessibility size={18} />
-        Acessibilidade
-      </button>
-
-      {open && (
-        <div
-          className="fixed inset-0 z-[80] bg-black/30 p-4"
-          onClick={() => setOpen(false)}
-        >
-          <aside
-            className="ml-auto mt-16 w-full max-w-sm rounded-3xl bg-white p-6 shadow-2xl"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex justify-between">
-              <div>
-                <p className="eyebrow">Acessibilidade</p>
-                <h2 className="text-2xl font-extrabold text-deep">
-                  Ajuste sua leitura
-                </h2>
-              </div>
-
-              <button onClick={() => setOpen(false)}>
-                <X />
-              </button>
-            </div>
-
-            <div className="mt-6 grid gap-3">
-              <button
-                className="btn btn-soft justify-between"
-                onClick={() => setLarge(!large)}
-              >
-                Texto maior
-                <span>{large ? "Ativo" : "Inativo"}</span>
-              </button>
-
-              <button
-                className="btn btn-soft justify-between"
-                onClick={() => setContrast(!contrast)}
-              >
-                Alto contraste
-                <span>{contrast ? "Ativo" : "Inativo"}</span>
-              </button>
-
-              <button
-                className="btn btn-soft justify-between"
-                onClick={() => setMotion(!motion)}
-              >
-                Reduzir animações
-                <span>{motion ? "Ativo" : "Inativo"}</span>
-              </button>
-
-              <button
-                className="btn btn-primary"
-                onClick={() => {
-                  setLarge(false);
-                  setContrast(false);
-                  setMotion(false);
-                }}
-              >
-                Restaurar padrão
-              </button>
-            </div>
-          </aside>
-        </div>
-      )}
-    </>
-  );
-}
-
 export default function Home() {
-  const supportCards: Array<
-    [React.ElementType, string, string, string, string]
-  > = [
-    [
-      Brain,
-      "NIA",
-      "Uma futura camada de inteligência artificial educativa, construída com limites claros.",
-      "/nia",
-      "Conhecer a NIA",
-    ],
-    [
-      ShieldCheck,
-      "Ajuda especializada",
-      "Links para organizações, registros profissionais e diretórios de busca.",
-      "/ajuda",
-      "Encontrar apoio",
-    ],
-    [
-      BookOpen,
-      "Biblioteca",
-      "Textos curtos para ler e consultar quando precisar.",
-      "/biblioteca",
-      "Abrir biblioteca",
-    ],
-  ];
+  const [niaOpen, setNiaOpen] = useState(false);
+  const [accessibilityOpen, setAccessibilityOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-white">
-      <Header />
+    <main className="min-h-screen bg-white">
+      <Header
+        onNia={() => setNiaOpen(true)}
+        onAccessibility={() => setAccessibilityOpen(true)}
+      />
 
-      <main>
-        <section className="gradient-hero overflow-hidden">
-          <div className="container grid items-center gap-12 py-16 md:grid-cols-[1.1fr_.9fr] md:py-24">
-            <div className="reveal">
-              <p className="eyebrow">Dyslexia Tortuguitas</p>
+      <section id="inicio" className="hero-section">
+        <div className="container grid items-center gap-12 py-14 md:grid-cols-[0.9fr_1.1fr] md:py-20">
+          <div className="hero-copy">
+            <p className="eyebrow">Informação · acolhimento · apoio</p>
 
-              <h1 className="mt-4 max-w-4xl text-5xl font-extrabold leading-[1.02] tracking-[-.045em] text-deep md:text-7xl">
-                Compreender é o primeiro passo para transformar.
-              </h1>
+            <h1 className="display-title mt-5">
+              Compreender,
+              <br />
+              acolher, <span>apoiar.</span>
+            </h1>
 
-              <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600 md:text-xl">
-                Informação, acolhimento e ferramentas para pessoas com
-                dislexia, famílias, escolas e profissionais.
-              </p>
+            <div className="orange-line" />
 
-              <div className="mt-8 flex flex-wrap gap-3">
-                <a
-                  href="/estudo/dislexia"
-                  className="btn btn-primary"
-                >
-                  Entender a dislexia
-                  <ArrowRight size={18} />
-                </a>
+            <p className="hero-text">
+              Informação de qualidade e recursos acessíveis para pessoas com
+              dislexia, famílias, profissionais e todos que querem fazer a
+              diferença.
+            </p>
 
-                <a href="/ajuda" className="btn btn-sun">
-                  Encontrar ajuda especializada
-                </a>
-              </div>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link href="/estudo/dislexia" className="btn btn-blue">
+                Entenda a dislexia
+                <ArrowRight size={19} />
+              </Link>
 
-              <div className="mt-8 flex flex-wrap gap-5 text-sm font-semibold text-slate-600">
-                <span>✓ Conteúdo educativo</span>
-                <span>✓ Navegação acessível</span>
-                <span>✓ Gratuito para começar</span>
-              </div>
-            </div>
-
-            <div className="card relative overflow-hidden p-7 md:p-9">
-              <Sparkles className="text-deep" size={30} />
-
-              <h2 className="mt-6 text-3xl font-extrabold text-deep">
-                Você não precisa descobrir tudo sozinho.
-              </h2>
-
-              <p className="mt-4 leading-8 text-slate-600">
-                Comece por onde fizer mais sentido. O site reúne informação,
-                estratégias e caminhos de apoio.
-              </p>
-
-              <div className="mt-7 grid gap-3">
-                <a
-                  href="/estudo/dislexia"
-                  className="rounded-2xl bg-cream p-4 font-bold text-deep"
-                >
-                  01 · Entenda →
-                </a>
-
-                <a
-                  href="/famosos"
-                  className="rounded-2xl bg-slate-50 p-4 font-bold text-deep"
-                >
-                  02 · Inspire-se →
-                </a>
-
-                <a
-                  href="/ajuda"
-                  className="rounded-2xl bg-slate-50 p-4 font-bold text-deep"
-                >
-                  03 · Encontre apoio →
-                </a>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="section">
-          <div className="container">
-            <div className="mb-10 max-w-3xl">
-              <p className="eyebrow">Por onde começar?</p>
-
-              <h2 className="mt-3 text-3xl font-extrabold text-deep md:text-5xl">
-                Escolha o caminho que combina com você.
-              </h2>
-
-              <p className="mt-4 text-lg leading-8 text-slate-600">
-                Não existe um único jeito de aprender.
-              </p>
-            </div>
-
-            <div className="grid gap-5 md:grid-cols-3">
-              {paths.map(([slug, title, Icon, text]) => (
-                <a
-                  href={`/${slug}`}
-                  key={slug}
-                  className="card group p-7"
-                >
-                  <Icon className="text-deep" size={30} />
-
-                  <h3 className="mt-6 text-2xl font-extrabold text-deep">
-                    {title}
-                  </h3>
-
-                  <p className="mt-3 leading-7 text-slate-600">
-                    {text}
-                  </p>
-
-                  <span className="mt-6 inline-flex gap-2 font-bold text-deep">
-                    Explorar
-                    <ArrowRight size={16} />
-                  </span>
-                </a>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="section bg-cream">
-          <div className="container grid gap-10 md:grid-cols-[.8fr_1.2fr] md:items-center">
-            <div>
-              <p className="eyebrow">Estudo em destaque</p>
-
-              <h2 className="mt-3 text-3xl font-extrabold text-deep md:text-5xl">
-                Entendendo a dislexia
-              </h2>
-
-              <p className="mt-5 text-lg leading-8 text-slate-600">
-                Um ponto de partida para compreender, apoiar, respeitar e
-                saber quando procurar ajuda.
-              </p>
-
-              <a
-                href="/estudo/dislexia"
-                className="btn btn-primary mt-7"
+              <button
+                type="button"
+                onClick={() => setNiaOpen(true)}
+                className="btn btn-outline-orange"
               >
-                Abrir estudo completo
-                <ArrowRight size={18} />
-              </a>
-            </div>
-
-            <div className="grid gap-4 sm:grid-cols-2">
-              {[
-                ["Compreender", "Conheça diferentes formas de aprender."],
-                ["Apoiar", "Transforme informação em estratégias."],
-                ["Respeitar", "Dificuldade não define inteligência."],
-                ["Encaminhar", "Saiba quando procurar ajuda."],
-              ].map(([title, text]) => (
-                <div
-                  key={title}
-                  className="rounded-3xl bg-white p-6"
-                >
-                  <h3 className="text-xl font-extrabold text-deep">
-                    {title}
-                  </h3>
-
-                  <p className="mt-2 leading-7 text-slate-600">
-                    {text}
-                  </p>
-                </div>
-              ))}
+                Fale com a NIA
+                <MessageCircle size={18} />
+              </button>
             </div>
           </div>
-        </section>
 
-        <section className="section">
-          <div className="container">
-            <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
+          <div className="hero-art-wrap">
+            <img
+              src="/hero-illustration.png"
+              alt="Ilustração de uma criança lendo com tranquilidade"
+              className="hero-art"
+            />
+          </div>
+        </div>
+      </section>
+
+      <section className="cream-section py-7 md:py-10">
+        <div className="container grid gap-5 md:grid-cols-3">
+          <article className="feature-card">
+            <div className="feature-icon blue">
+              <BookOpen size={34} />
+            </div>
+            <h2>Entenda a dislexia</h2>
+            <p>
+              Conheça a dislexia, suas características e diferentes formas de
+              aprendizagem.
+            </p>
+            <Link href="/estudo/dislexia" className="card-link">
+              Saiba mais <ArrowRight size={17} />
+            </Link>
+          </article>
+
+          <article className="feature-card">
+            <div className="feature-icon orange">
+              <HeartHandshake size={34} />
+            </div>
+            <h2 className="orange-title">Para responsáveis</h2>
+            <p>
+              Estratégias e informações para famílias e pessoas que acompanham
+              crianças e jovens.
+            </p>
+            <Link href="/responsaveis" className="card-link orange-link">
+              Acessar <ArrowRight size={17} />
+            </Link>
+          </article>
+
+          <article className="feature-card">
+            <div className="feature-icon blue">
+              <Brain size={34} />
+            </div>
+            <h2>Para profissionais</h2>
+            <p>
+              Materiais e caminhos para profissionais que trabalham com
+              aprendizagem.
+            </p>
+            <Link href="/profissionais#gerador" className="card-link">
+              Acessar <ArrowRight size={17} />
+            </Link>
+          </article>
+        </div>
+      </section>
+
+      <section className="about-section">
+        <div className="container grid items-center gap-10 md:grid-cols-[1fr_.9fr]">
+          <div>
+            <p className="eyebrow">Conhecimento para compreender</p>
+            <h2 className="section-title mt-4">Sobre a dislexia</h2>
+            <div className="orange-line" />
+            <p className="section-text">
+              A dislexia é uma variação de aprendizagem que pode afetar
+              habilidades de leitura, escrita e soletração. Com informação,
+              acolhimento e estratégias adequadas, é possível aprender e se
+              desenvolver de muitas maneiras.
+            </p>
+            <Link href="/estudo/dislexia" className="btn btn-blue mt-7">
+              Saiba mais sobre a dislexia
+              <ArrowRight size={19} />
+            </Link>
+          </div>
+
+          <div className="about-art-wrap">
+            <img
+              src="/section-illustration.png"
+              alt=""
+              className="about-art"
+              aria-hidden="true"
+            />
+          </div>
+        </div>
+      </section>
+
+      <section id="nia" className="nia-section">
+        <div className="container grid items-center gap-10 md:grid-cols-[.8fr_1.2fr]">
+          <div className="text-white">
+            <p className="eyebrow text-[#BAD8E8]">NIA · Núcleo de Inteligência e Apoio</p>
+            <h2 className="mt-4 text-4xl font-bold md:text-5xl">
+              Transforme dúvidas em caminhos possíveis.
+            </h2>
+            <p className="mt-5 max-w-xl text-lg leading-8 text-white/80">
+              Uma ferramenta de apoio educativo para dúvidas sobre
+              aprendizagem, leitura, estudo e estratégias de apoio.
+            </p>
+            <button
+              type="button"
+              onClick={() => setNiaOpen(true)}
+              className="btn btn-orange mt-7"
+            >
+              Conversar com a NIA
+              <MessageCircle size={18} />
+            </button>
+          </div>
+
+          <div className="nia-preview">
+            <div className="nia-preview-head">
+              <div className="nia-avatar">N</div>
               <div>
-                <p className="eyebrow">Histórias que inspiram</p>
-
-                <h2 className="mt-3 text-3xl font-extrabold text-deep md:text-5xl">
-                  Famosos também tiveram caminhos diferentes.
-                </h2>
-
-                <p className="mt-4 max-w-2xl text-lg leading-8 text-slate-600">
-                  Conheça histórias públicas de pessoas que falaram sobre
-                  dislexia.
-                </p>
-              </div>
-
-              <a href="/famosos" className="btn btn-soft">
-                Ver histórias
-                <ArrowRight size={18} />
-              </a>
-            </div>
-
-            <div className="mt-8 rounded-[2rem] bg-deep p-8 text-white md:p-10">
-              <div className="grid gap-8 md:grid-cols-[.4fr_1fr_auto] md:items-center">
-                <div className="text-7xl font-black text-white/15">
-                  TC
-                </div>
-
-                <div>
-                  <p className="text-sm font-bold uppercase tracking-[.16em] text-white/60">
-                    Cinema · exemplo público
-                  </p>
-
-                  <h3 className="mt-2 text-3xl font-extrabold">
-                    Tom Cruise
-                  </h3>
-
-                  <p className="mt-3 max-w-2xl leading-7 text-white/80">
-                    Uma trajetória conhecida de perseverança, apresentada
-                    sem transformar sucesso em comparação.
-                  </p>
-                </div>
-
-                <a href="/famosos" className="btn btn-sun">
-                  Conhecer
-                  <ArrowRight size={18} />
-                </a>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="section bg-slate-50">
-          <div className="container grid gap-5 md:grid-cols-3">
-            {supportCards.map(
-              ([Icon, title, description, href, label], index) => (
-                <div key={index} className="card p-7">
-                  <Icon className="text-deep" size={30} />
-
-                  <h3 className="mt-5 text-2xl font-extrabold text-deep">
-                    {title}
-                  </h3>
-
-                  <p className="mt-3 leading-7 text-slate-600">
-                    {description}
-                  </p>
-
-                  <a
-                    href={href}
-                    className="mt-5 inline-flex gap-2 font-bold text-deep"
-                  >
-                    {label}
-                    <ArrowRight size={16} />
-                  </a>
-                </div>
-              )
-            )}
-          </div>
-        </section>
-
-        <section className="section">
-          <div className="container">
-            <div className="card flex flex-col gap-6 p-7 md:flex-row md:items-center md:justify-between md:p-10">
-              <div>
-                <p className="eyebrow">Acessibilidade</p>
-
-                <h2 className="mt-2 text-3xl font-extrabold text-deep">
-                  Faça o site funcionar melhor para você.
-                </h2>
-
-                <p className="mt-3 max-w-2xl leading-7 text-slate-600">
-                  Ajuste o tamanho do texto, o contraste e as animações
-                  conforme sua preferência.
-                </p>
-              </div>
-
-              <AccessibilityPanel />
-            </div>
-          </div>
-        </section>
-      </main>
-
-      <footer className="border-t bg-deep py-12 text-white">
-        <div className="container">
-          <div className="grid gap-8 md:grid-cols-3">
-            <div>
-              <h2 className="text-xl font-extrabold">
-                Dyslexia Tortuguitas
-              </h2>
-
-              <p className="mt-3 max-w-sm leading-7 text-white/70">
-                Informação, acolhimento e caminhos de apoio para uma
-                aprendizagem mais inclusiva.
-              </p>
-            </div>
-
-            <div>
-              <h3 className="font-bold">Explorar</h3>
-
-              <div className="mt-3 grid gap-2 text-white/70">
-                <a href="/estudo/dislexia">Entenda a dislexia</a>
-                <a href="/famosos">Famosos</a>
-                <a href="/biblioteca">Biblioteca</a>
-                <a href="/entre-linhas">Entre Linhas</a>
+                <strong>NIA</strong>
+                <span>Apoio educativo</span>
               </div>
             </div>
 
-            <div>
-              <h3 className="font-bold">Ajuda</h3>
+            <div className="nia-bubble user">
+              Meu filho fica frustrado quando precisa ler. Como posso ajudar?
+            </div>
 
-              <div className="mt-3 grid gap-2 text-white/70">
-                <a href="/ajuda">Ajuda especializada</a>
-                <a href="/responsaveis">Responsáveis</a>
-                <a href="/profissionais">Profissionais</a>
-                <a href="/sobre">Sobre nós</a>
-              </div>
+            <div className="nia-bubble">
+              Podemos pensar em pequenas etapas, pausas e estratégias que
+              tornem a atividade mais previsível e confortável.
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setNiaOpen(true)}
+              className="nia-preview-button"
+            >
+              Fazer uma pergunta <ArrowRight size={18} />
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <footer className="footer">
+        <div className="container grid gap-8 md:grid-cols-[1.2fr_.8fr_.8fr]">
+          <div>
+            <img src="/logo.png" alt="DysHelp" className="h-[64px] w-auto" />
+            <p className="mt-4 max-w-md text-sm leading-7 text-white/75">
+              Compreender. Acolher. Apoiar. Informação de qualidade e recursos
+              acessíveis sobre dislexia.
+            </p>
+          </div>
+
+          <div>
+            <h2 className="footer-title">Explorar</h2>
+            <div className="footer-links">
+              <Link href="/estudo/dislexia">Entenda a dislexia</Link>
+              <Link href="/famosos">Famosos</Link>
+              <Link href="/biblioteca">Biblioteca</Link>
+              <Link href="/ajuda">Ajuda</Link>
             </div>
           </div>
 
-          <div className="mt-10 border-t border-white/10 pt-6 text-sm text-white/50">
-            © 2026 Dyslexia Tortuguitas. Conteúdo educativo.
+          <div>
+            <h2 className="footer-title">Apoio</h2>
+            <div className="footer-links">
+              <Link href="/profissionais#gerador">Gerador de Atividades</Link>
+              <button type="button" onClick={() => setNiaOpen(true)}>
+                NIA
+              </button>
+              <Link href="/sobre">Sobre</Link>
+            </div>
           </div>
+        </div>
+
+        <div className="container mt-10 border-t border-white/15 pt-6 text-sm text-white/60">
+          © 2026 DysHelp — Conteúdo educativo.
         </div>
       </footer>
-    </div>
+
+      <AccessibilityPanel
+        open={accessibilityOpen}
+        onClose={() => setAccessibilityOpen(false)}
+      />
+
+      <NiaModal open={niaOpen} onClose={() => setNiaOpen(false)} />
+    </main>
   );
 }

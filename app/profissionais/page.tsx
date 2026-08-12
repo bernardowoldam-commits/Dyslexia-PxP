@@ -93,6 +93,7 @@ REGRAS:
       setActivity(data.answer || "");
     } catch (err) {
       console.error(err);
+
       setError(
         "Não foi possível gerar a atividade agora. Tente novamente."
       );
@@ -105,7 +106,11 @@ REGRAS:
     setActivity("");
     setError("");
     setExtra("");
-    window.scrollTo({ top: 0, behavior: "smooth" });
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   }
 
   function printActivity() {
@@ -120,6 +125,7 @@ REGRAS:
             <div className="text-xl font-extrabold tracking-tight text-deep">
               DYSLEXIA TORTUGUITAS
             </div>
+
             <div className="text-[10px] font-bold tracking-[.18em] text-slate-500">
               COMPREENDER. ACOLHER. APOIAR.
             </div>
@@ -145,15 +151,16 @@ REGRAS:
               de forma mais organizada e acessível.
             </p>
 
+            {/* GERADOR DE ATIVIDADES */}
             <section
-              id="fazedor"
+              id="gerador"
               className="mt-12 rounded-3xl border border-slate-200 bg-slate-50 p-6 md:p-8"
             >
               <div className="max-w-3xl">
                 <p className="eyebrow">Ferramenta profissional</p>
 
                 <h2 className="mt-3 text-3xl font-extrabold text-deep md:text-4xl">
-                  Fazedor de Atividades
+                  Gerador de Atividades
                 </h2>
 
                 <p className="mt-4 leading-8 text-slate-600">
@@ -163,6 +170,7 @@ REGRAS:
               </div>
 
               <div className="mt-8 grid gap-5 md:grid-cols-2">
+                {/* SÉRIE */}
                 <label className="block">
                   <span className="mb-2 block font-bold text-deep">
                     Ano / Série
@@ -181,6 +189,7 @@ REGRAS:
                   </select>
                 </label>
 
+                {/* OBJETIVO */}
                 <label className="block">
                   <span className="mb-2 block font-bold text-deep">
                     Objetivo
@@ -199,6 +208,7 @@ REGRAS:
                   </select>
                 </label>
 
+                {/* NÍVEL */}
                 <label className="block">
                   <span className="mb-2 block font-bold text-deep">
                     Nível
@@ -217,6 +227,7 @@ REGRAS:
                   </select>
                 </label>
 
+                {/* QUANTIDADE */}
                 <label className="block">
                   <span className="mb-2 block font-bold text-deep">
                     Quantidade de questões
@@ -232,13 +243,15 @@ REGRAS:
 
                       return (
                         <option key={value} value={value}>
-                          {value} {value === "1" ? "questão" : "questões"}
+                          {value}{" "}
+                          {value === "1" ? "questão" : "questões"}
                         </option>
                       );
                     })}
                   </select>
                 </label>
 
+                {/* ORIENTAÇÕES */}
                 <label className="block md:col-span-2">
                   <span className="mb-2 block font-bold text-deep">
                     Orientações adicionais{" "}
@@ -257,6 +270,7 @@ REGRAS:
                 </label>
               </div>
 
+              {/* BOTÕES */}
               <div className="mt-6 flex flex-wrap gap-3">
                 <button
                   type="button"
@@ -264,7 +278,9 @@ REGRAS:
                   disabled={loading}
                   className="btn btn-primary disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                  {loading ? "Gerando atividade..." : "Gerar atividade →"}
+                  {loading
+                    ? "Gerando atividade..."
+                    : "Gerar atividade →"}
                 </button>
 
                 {activity && (
@@ -278,6 +294,7 @@ REGRAS:
                 )}
               </div>
 
+              {/* ERRO */}
               {error && (
                 <div
                   role="alert"
@@ -287,6 +304,7 @@ REGRAS:
                 </div>
               )}
 
+              {/* RESULTADO */}
               {activity && (
                 <section
                   id="atividade-gerada"
@@ -304,7 +322,9 @@ REGRAS:
 
                       <p className="mt-2 text-slate-600">
                         Nível {level} · {quantity}{" "}
-                        {quantity === "1" ? "questão" : "questões"}
+                        {quantity === "1"
+                          ? "questão"
+                          : "questões"}
                       </p>
                     </div>
 
@@ -324,6 +344,7 @@ REGRAS:
               )}
             </section>
 
+            {/* RECURSOS PROFISSIONAIS */}
             <div className="mt-12 grid gap-8 md:grid-cols-2 print:hidden">
               <section className="card p-7 md:p-8">
                 <h2 className="text-2xl font-extrabold text-deep">
@@ -342,8 +363,9 @@ REGRAS:
                 </h2>
 
                 <p className="mt-4 leading-8 text-slate-600">
-                  Considere tempo, formato de apresentação, organização das
-                  tarefas e formas alternativas de demonstrar aprendizagem.
+                  Considere tempo, formato de apresentação,
+                  organização das tarefas e formas alternativas de
+                  demonstrar aprendizagem.
                 </p>
               </section>
 
@@ -353,8 +375,8 @@ REGRAS:
                 </h2>
 
                 <p className="mt-4 leading-8 text-slate-600">
-                  Prefira materiais legíveis, previsíveis e organizados em
-                  blocos curtos.
+                  Prefira materiais legíveis, previsíveis e
+                  organizados em blocos curtos.
                 </p>
               </section>
 
@@ -370,6 +392,7 @@ REGRAS:
               </section>
             </div>
 
+            {/* NAVEGAÇÃO */}
             <div className="mt-12 flex flex-wrap gap-3 print:hidden">
               <Link
                 href="/estudo/dislexia"

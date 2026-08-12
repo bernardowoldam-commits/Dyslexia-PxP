@@ -10,6 +10,11 @@ export default function Page() {
   const [error, setError] = useState("");
 
   async function askNia() {
+    if (!message.trim()) {
+      setError("Digite uma pergunta para conversar com a NIA.");
+      return;
+    }
+
     setLoading(true);
     setResponse("");
     setError("");
@@ -21,9 +26,7 @@ export default function Page() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          message:
-            message.trim() ||
-            "Olá NIA! Explique em uma frase o que é dislexia.",
+          message: message.trim(),
         }),
       });
 
@@ -35,7 +38,9 @@ export default function Page() {
         );
       }
 
-      setResponse(data.response || "A NIA não retornou uma resposta.");
+      setResponse(
+        data.response || "A NIA não retornou uma resposta."
+      );
     } catch (err) {
       setError(
         err instanceof Error
@@ -47,152 +52,326 @@ export default function Page() {
     }
   }
 
+  function newQuestion() {
+    setMessage("");
+    setResponse("");
+    setError("");
+  }
+
   return (
-    <main className="min-h-screen bg-white">
-      <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
-        <div className="container flex min-h-[76px] items-center justify-between gap-4">
-          <Link href="/" className="shrink-0">
-            <div className="text-xl font-extrabold tracking-tight text-deep">
-              DYSLEXIA TORTUGUITAS
+    <main className="min-h-screen bg-[#F3EAD9] text-[#6997B8]">
+
+      {/* HERO DA NIA */}
+      <section className="bg-white">
+        <div className="mx-auto max-w-6xl px-6 pb-16 pt-12 md:pb-20 md:pt-16">
+
+          <div className="max-w-3xl">
+
+            <div className="inline-flex items-center gap-2 rounded-full bg-[#BAD8E8]/45 px-4 py-2 text-sm font-bold text-[#6997B8]">
+              <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#6997B8] text-white">
+                ✦
+              </span>
+              Assistente educativa DysHelp
             </div>
 
-            <div className="text-[10px] font-bold tracking-[.18em] text-slate-500">
-              COMPREENDER. ACOLHER. APOIAR.
-            </div>
-          </Link>
-
-          <Link href="/" className="btn btn-soft">
-            ← Voltar ao início
-          </Link>
-        </div>
-      </header>
-
-      <article className="section">
-        <div className="container">
-          <div className="mx-auto max-w-5xl">
-            <p className="eyebrow">IA educativa</p>
-
-            <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-deep md:text-6xl">
-              NIA — Núcleo de Inteligência e Apoio
+            <h1 className="mt-6 font-serif text-5xl font-bold leading-tight text-[#6997B8] md:text-6xl">
+              Olá, eu sou a{" "}
+              <span className="text-[#F3A05B]">NIA.</span>
             </h1>
 
-            <p className="mt-6 max-w-3xl text-xl leading-9 text-slate-600">
-              Uma assistente educativa para ajudar a compreender a dislexia
-              com informação clara, acolhedora e responsável.
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-[#6997B8]/80 md:text-xl">
+              Núcleo de Inteligência e Apoio. Estou aqui para ajudar você
+              a compreender melhor a dislexia, a aprendizagem e estratégias
+              de apoio.
             </p>
 
-            <div className="mt-10 card p-7 md:p-8">
-              <h2 className="text-2xl font-extrabold text-deep">
-                Converse com a NIA
-              </h2>
+          </div>
 
-              <p className="mt-3 leading-8 text-slate-600">
-                Faça uma pergunta sobre dislexia, leitura, aprendizagem ou
-                estratégias de apoio.
-              </p>
+        </div>
+      </section>
+
+
+      {/* ÁREA DE CONVERSA */}
+      <section className="px-6 py-12 md:py-16">
+
+        <div className="mx-auto max-w-4xl">
+
+          <div className="overflow-hidden rounded-[32px] border border-[#6997B8]/15 bg-white shadow-[0_15px_50px_rgba(54,91,116,0.10)]">
+
+            {/* CABEÇALHO DO CARD */}
+            <div className="flex items-center gap-4 border-b border-[#6997B8]/10 bg-[#BAD8E8]/25 px-6 py-5 md:px-8">
+
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#6997B8] text-xl text-white shadow-sm">
+                ✦
+              </div>
+
+              <div>
+                <h2 className="font-bold text-[#6997B8]">
+                  Converse com a NIA
+                </h2>
+
+                <p className="text-sm text-[#6997B8]/70">
+                  Faça uma pergunta e receba uma orientação educativa.
+                </p>
+              </div>
+
+            </div>
+
+
+            {/* CONTEÚDO */}
+            <div className="p-6 md:p-8">
+
+              <label
+                htmlFor="nia-question"
+                className="text-sm font-bold text-[#6997B8]"
+              >
+                Sua pergunta
+              </label>
 
               <textarea
+                id="nia-question"
                 value={message}
-                onChange={(event) => setMessage(event.target.value)}
-                placeholder="Ex.: O que é dislexia?"
-                className="mt-6 min-h-[140px] w-full rounded-2xl border border-slate-300 p-4 outline-none focus:border-slate-500"
+                onChange={(event) => {
+                  setMessage(event.target.value);
+                  if (error) setError("");
+                }}
+                onKeyDown={(event) => {
+                  if (
+                    event.key === "Enter" &&
+                    !event.shiftKey
+                  ) {
+                    event.preventDefault();
+                    askNia();
+                  }
+                }}
+                placeholder="Ex.: Como posso ajudar uma criança com dislexia a estudar?"
+                className="mt-3 min-h-[150px] w-full resize-y rounded-2xl border-2 border-[#6997B8]/15 bg-[#F3EAD9]/30 p-5 text-base leading-7 text-[#244A6F] outline-none transition placeholder:text-[#6997B8]/50 focus:border-[#6997B8] focus:bg-white"
+                aria-describedby="nia-help"
               />
 
-              <button
-                type="button"
-                onClick={askNia}
-                disabled={loading}
-                className="btn btn-primary mt-5 disabled:cursor-not-allowed disabled:opacity-60"
+              <p
+                id="nia-help"
+                className="mt-2 text-xs text-[#6997B8]/60"
               >
-                {loading ? "A NIA está pensando..." : "Perguntar à NIA →"}
-              </button>
+                Pressione Enter para enviar ou Shift + Enter para criar uma
+                nova linha.
+              </p>
 
+
+              {/* BOTÕES */}
+              <div className="mt-5 flex flex-wrap gap-3">
+
+                <button
+                  type="button"
+                  onClick={askNia}
+                  disabled={loading}
+                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-[#6997B8] px-6 py-3.5 font-bold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#F3A05B] disabled:cursor-not-allowed disabled:opacity-60"
+                >
+                  {loading ? (
+                    <>
+                      <span className="animate-pulse">✦</span>
+                      A NIA está pensando...
+                    </>
+                  ) : (
+                    <>
+                      <span>✦</span>
+                      Perguntar à NIA
+                    </>
+                  )}
+                </button>
+
+                {(message || response || error) && !loading && (
+                  <button
+                    type="button"
+                    onClick={newQuestion}
+                    className="rounded-xl border-2 border-[#6997B8]/20 px-6 py-3.5 font-bold text-[#6997B8] transition hover:bg-[#BAD8E8]/35"
+                  >
+                    Nova pergunta
+                  </button>
+                )}
+
+              </div>
+
+
+              {/* RESPOSTA */}
               {response && (
-                <div className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-6">
-                  <h3 className="font-extrabold text-deep">
-                    Resposta da NIA
-                  </h3>
+                <div className="mt-8 rounded-3xl border border-[#6997B8]/15 bg-[#BAD8E8]/20 p-6 md:p-7">
 
-                  <p className="mt-3 whitespace-pre-wrap leading-8 text-slate-700">
-                    {response}
-                  </p>
+                  <div className="flex items-center gap-3">
+
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#6997B8] text-white">
+                      ✦
+                    </div>
+
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-wider text-[#6997B8]/60">
+                        NIA
+                      </p>
+
+                      <h3 className="font-bold text-[#6997B8]">
+                        Minha resposta
+                      </h3>
+                    </div>
+
+                  </div>
+
+                  <div className="mt-5 rounded-2xl bg-white p-5 md:p-6">
+                    <p className="whitespace-pre-wrap leading-8 text-[#244A6F]">
+                      {response}
+                    </p>
+                  </div>
+
                 </div>
               )}
 
-              {error && (
-                <div className="mt-6 rounded-2xl border border-red-200 bg-red-50 p-6">
-                  <h3 className="font-extrabold text-red-800">
-                    Não foi possível obter uma resposta
-                  </h3>
 
-                  <p className="mt-3 whitespace-pre-wrap leading-7 text-red-700">
+              {/* ERRO */}
+              {error && (
+                <div
+                  role="alert"
+                  className="mt-6 rounded-2xl border border-[#F3A05B]/30 bg-[#F3EAD9] p-5"
+                >
+                  <p className="font-bold text-[#C66F32]">
+                    Não foi possível obter uma resposta.
+                  </p>
+
+                  <p className="mt-2 leading-7 text-[#6997B8]">
                     {error}
                   </p>
                 </div>
               )}
-            </div>
 
-            <div className="mt-12 grid gap-8 md:grid-cols-2">
-              <section className="card p-7 md:p-8">
-                <h2 className="text-2xl font-extrabold text-deep">
-                  O que a NIA fará
-                </h2>
-
-                <p className="mt-4 leading-8 text-slate-600">
-                  Apoiar dúvidas educativas, explicar conceitos e sugerir
-                  caminhos de estudo e apoio.
-                </p>
-              </section>
-
-              <section className="card p-7 md:p-8">
-                <h2 className="text-2xl font-extrabold text-deep">
-                  O que a NIA não fará
-                </h2>
-
-                <p className="mt-4 leading-8 text-slate-600">
-                  A ferramenta não deve diagnosticar, prometer cura ou
-                  substituir avaliação e acompanhamento profissional.
-                </p>
-              </section>
-
-              <section className="card p-7 md:p-8">
-                <h2 className="text-2xl font-extrabold text-deep">
-                  Privacidade
-                </h2>
-
-                <p className="mt-4 leading-8 text-slate-600">
-                  A chave da API permanece no servidor e não é colocada no
-                  código do navegador.
-                </p>
-              </section>
-
-              <section className="card p-7 md:p-8">
-                <h2 className="text-2xl font-extrabold text-deep">
-                  Uso responsável
-                </h2>
-
-                <p className="mt-4 leading-8 text-slate-600">
-                  As respostas da NIA têm finalidade educativa e não
-                  substituem profissionais especializados.
-                </p>
-              </section>
-            </div>
-
-            <div className="mt-12 flex flex-wrap gap-3">
-              <Link
-                href="/estudo/dislexia"
-                className="btn btn-primary"
-              >
-                Estudo sobre dislexia →
-              </Link>
-
-              <Link href="/" className="btn btn-soft">
-                Explorar o site
-              </Link>
             </div>
           </div>
+
         </div>
-      </article>
+
+      </section>
+
+
+      {/* O QUE A NIA FAZ */}
+      <section className="bg-white px-6 py-16">
+
+        <div className="mx-auto max-w-6xl">
+
+          <div className="max-w-2xl">
+
+            <p className="text-sm font-bold tracking-[0.18em] text-[#6997B8]">
+              COMO POSSO AJUDAR
+            </p>
+
+            <h2 className="mt-3 font-serif text-4xl font-bold text-[#6997B8] md:text-5xl">
+              Apoio simples e responsável.
+            </h2>
+
+          </div>
+
+
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
+
+            <article className="rounded-3xl border border-[#6997B8]/15 bg-[#BAD8E8]/20 p-7">
+
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#6997B8] text-xl text-white">
+                ?
+              </div>
+
+              <h3 className="mt-5 text-xl font-bold text-[#6997B8]">
+                Tirar dúvidas
+              </h3>
+
+              <p className="mt-3 leading-7 text-[#6997B8]/80">
+                Explique conceitos relacionados à dislexia, leitura,
+                aprendizagem e estudo.
+              </p>
+
+            </article>
+
+
+            <article className="rounded-3xl border border-[#F3A05B]/25 bg-[#F3EAD9] p-7">
+
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#F3A05B] text-xl text-white">
+                ✓
+              </div>
+
+              <h3 className="mt-5 text-xl font-bold text-[#F3A05B]">
+                Sugerir estratégias
+              </h3>
+
+              <p className="mt-3 leading-7 text-[#6997B8]/80">
+                Encontre ideias práticas para organizar estudos e apoiar
+                diferentes formas de aprendizagem.
+              </p>
+
+            </article>
+
+
+            <article className="rounded-3xl border border-[#6997B8]/15 bg-[#BAD8E8]/20 p-7">
+
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#6997B8] text-xl text-white">
+                ♥
+              </div>
+
+              <h3 className="mt-5 text-xl font-bold text-[#6997B8]">
+                Acolher
+              </h3>
+
+              <p className="mt-3 leading-7 text-[#6997B8]/80">
+                Oferecer informações de forma clara, respeitosa e sem
+                julgamentos.
+              </p>
+
+            </article>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      {/* AVISO */}
+      <section className="px-6 py-12">
+
+        <div className="mx-auto max-w-4xl rounded-3xl border border-[#6997B8]/15 bg-[#BAD8E8]/20 p-6 md:p-8">
+
+          <h2 className="font-bold text-[#6997B8]">
+            Um apoio educativo
+          </h2>
+
+          <p className="mt-3 leading-7 text-[#6997B8]/80">
+            A NIA oferece informações e sugestões com finalidade educativa.
+            Ela não realiza diagnósticos, não prescreve medicamentos e não
+            substitui profissionais especializados.
+          </p>
+
+        </div>
+
+      </section>
+
+
+      {/* NAVEGAÇÃO FINAL */}
+      <section className="px-6 pb-16">
+
+        <div className="mx-auto flex max-w-4xl flex-wrap gap-3">
+
+          <Link
+            href="/"
+            className="rounded-xl bg-[#6997B8] px-6 py-3.5 font-bold text-white transition hover:bg-[#F3A05B]"
+          >
+            ← Voltar ao início
+          </Link>
+
+          <Link
+            href="/estudo/dislexia"
+            className="rounded-xl border-2 border-[#6997B8]/20 px-6 py-3.5 font-bold text-[#6997B8] transition hover:bg-[#BAD8E8]/35"
+          >
+            Estudar sobre dislexia
+          </Link>
+
+        </div>
+
+      </section>
+
     </main>
   );
 }

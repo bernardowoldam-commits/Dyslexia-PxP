@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
 import "./globals.css";
 
 export const metadata: Metadata = {
   title: "DysHelp",
   description:
-    "Compreender, acolher e apoiar pessoas com dislexia e suas redes de apoio.",
+    "Informação, acolhimento e apoio para pessoas com dislexia, famílias e profissionais.",
 };
 
 export default function RootLayout({
@@ -14,116 +16,122 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body className="min-h-screen bg-[#F3EAD9] text-[#6997B8] antialiased">
+      <body className="bg-[#F3EAD9] text-[#244A6F] antialiased">
         <header className="sticky top-0 z-50 border-b border-[#6997B8]/20 bg-[#F3EAD9]/95 backdrop-blur">
-          <div className="mx-auto flex min-h-[82px] w-full max-w-7xl items-center justify-between gap-6 px-5 sm:px-8">
+          <div className="mx-auto flex min-h-[84px] max-w-7xl items-center justify-between px-6">
             
             {/* LOGO */}
-            <a
+            <Link
               href="/"
-              className="flex shrink-0 items-center"
+              className="flex items-center gap-3 shrink-0"
               aria-label="DysHelp - página inicial"
             >
-              <img
-                src="/DISLEXIA%20%281%29.png"
+              <Image
+                src="/DISLEXIA (1).png"
                 alt="DysHelp"
-                className="h-16 w-auto object-contain sm:h-[72px]"
+                width={64}
+                height={64}
+                priority
+                className="h-16 w-auto object-contain"
               />
-            </a>
+            </Link>
 
-            {/* NAVEGAÇÃO */}
+            {/* NAVEGAÇÃO PRINCIPAL */}
             <nav
+              className="hidden items-center gap-9 md:flex"
               aria-label="Navegação principal"
-              className="hidden items-center gap-2 md:flex"
             >
-              <a
+              <Link
                 href="/"
-                className="rounded-xl px-4 py-3 text-sm font-semibold text-[#6997B8] transition hover:bg-[#BAD8E8]/50"
+                className="font-semibold text-[#6997B8] transition hover:text-[#F3A05B]"
               >
                 Início
-              </a>
+              </Link>
 
-              <a
+              <Link
                 href="/estudo/dislexia"
-                className="rounded-xl px-4 py-3 text-sm font-semibold text-[#6997B8] transition hover:bg-[#BAD8E8]/50"
+                className="font-semibold text-[#6997B8] transition hover:text-[#F3A05B]"
               >
                 Dislexia
-              </a>
+              </Link>
 
-              <a
+              <Link
                 href="/atividades"
-                className="rounded-xl px-4 py-3 text-sm font-semibold text-[#6997B8] transition hover:bg-[#BAD8E8]/50"
+                className="font-semibold text-[#6997B8] transition hover:text-[#F3A05B]"
               >
                 Atividades
-              </a>
+              </Link>
 
-              <a
+              <Link
                 href="/profissionais"
-                className="rounded-xl px-4 py-3 text-sm font-semibold text-[#6997B8] transition hover:bg-[#BAD8E8]/50"
+                className="font-semibold text-[#6997B8] transition hover:text-[#F3A05B]"
               >
                 Profissionais
-              </a>
+              </Link>
 
-              <a
+              <Link
                 href="/ajuda"
-                className="rounded-xl px-4 py-3 text-sm font-semibold text-[#6997B8] transition hover:bg-[#BAD8E8]/50"
+                className="font-semibold text-[#6997B8] transition hover:text-[#F3A05B]"
               >
                 Ajuda
-              </a>
+              </Link>
             </nav>
 
-            {/* BOTÃO NIA */}
-            <a
+            {/* NIA */}
+            <Link
               href="/nia"
-              className="rounded-xl bg-[#6997B8] px-4 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-[#527f9f] sm:px-5"
+              className="rounded-2xl bg-[#6997B8] px-7 py-4 font-bold text-white transition hover:bg-[#F3A05B]"
             >
               NIA
-            </a>
+            </Link>
+          </div>
+
+          {/* NAVEGAÇÃO MOBILE */}
+          <div className="border-t border-[#6997B8]/15 md:hidden">
+            <nav
+              className="mx-auto flex max-w-7xl gap-5 overflow-x-auto px-6 py-3"
+              aria-label="Navegação móvel"
+            >
+              <Link
+                href="/"
+                className="whitespace-nowrap font-semibold text-[#6997B8]"
+              >
+                Início
+              </Link>
+
+              <Link
+                href="/estudo/dislexia"
+                className="whitespace-nowrap font-semibold text-[#6997B8]"
+              >
+                Dislexia
+              </Link>
+
+              <Link
+                href="/atividades"
+                className="whitespace-nowrap font-semibold text-[#6997B8]"
+              >
+                Atividades
+              </Link>
+
+              <Link
+                href="/profissionais"
+                className="whitespace-nowrap font-semibold text-[#6997B8]"
+              >
+                Profissionais
+              </Link>
+
+              <Link
+                href="/ajuda"
+                className="whitespace-nowrap font-semibold text-[#6997B8]"
+              >
+                Ajuda
+              </Link>
+            </nav>
           </div>
         </header>
 
         {/* CONTEÚDO DAS PÁGINAS */}
-        <main className="min-h-[calc(100vh-82px)]">
-          {children}
-        </main>
-
-        {/* RODAPÉ */}
-        <footer className="border-t border-[#6997B8]/20 bg-[#F3EAD9]">
-          <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 px-5 py-8 sm:px-8 md:flex-row md:items-center md:justify-between">
-            <div>
-              <p className="text-lg font-bold text-[#6997B8]">
-                DysHelp
-              </p>
-
-              <p className="mt-1 text-sm text-[#6997B8]/75">
-                Compreender. Acolher. Apoiar.
-              </p>
-            </div>
-
-            <div className="flex flex-wrap gap-4 text-sm">
-              <a
-                href="/ajuda"
-                className="font-semibold text-[#6997B8] hover:underline"
-              >
-                Ajuda
-              </a>
-
-              <a
-                href="/sobre"
-                className="font-semibold text-[#6997B8] hover:underline"
-              >
-                Sobre
-              </a>
-
-              <a
-                href="/responsaveis"
-                className="font-semibold text-[#6997B8] hover:underline"
-              >
-                Responsáveis
-              </a>
-            </div>
-          </div>
-        </footer>
+        <main>{children}</main>
       </body>
     </html>
   );

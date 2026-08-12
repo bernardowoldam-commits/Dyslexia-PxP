@@ -1,24 +1,105 @@
+@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+:root{--deep:#234E70;--sky:#8EC5E8;--sage:#A8D5BA;--cream:#F8F5EF;--ink:#263238;--sun:#F4D35E}
+*{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;background:#fff;color:var(--ink);font-family:Inter,Arial,sans-serif}
+button,input,select,textarea{font:inherit}.focus-ring:focus-visible,button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #F4D35E;outline-offset:3px}
+.container{width:min(1180px,calc(100% - 40px));margin:auto}
+.section{padding:92px 0}.eyebrow{font-size:.8rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:#4d7189}
+.gradient-hero{background:radial-gradient(circle at 80% 25%,rgba(142,197,232,.48),transparent 34%),linear-gradient(135deg,#f8f5ef 0%,#fff 58%,#eef7fb 100%)}
+.card{border:1px solid #dfe8ed;border-radius:24px;background:#fff;box-shadow:0 12px 36px rgba(35,78,112,.07)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;border-radius:13px;padding:13px 18px;font-weight:700;transition:.2s;cursor:pointer}
+.btn:hover{transform:translateY(-2px)} .btn-primary{background:var(--deep);color:white}.btn-sun{background:var(--sun);color:var(--ink)}.btn-soft{background:#eef6fa;color:var(--deep)}
+.nav-link{font-size:.9rem;font-weight:600;color:#40535e}.nav-link:hover{color:var(--deep)}
+.reveal{animation:rise .6s ease both}@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.reveal,.btn{animation:none;transition:none}}
+.contrast{filter:contrast(1.18)} .large-text{font-size:1.08em}.no-motion *, .no-motion *::before,.no-motion *::after{animation:none!important;transition:none!important}
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+
+/* =========================================================
+   Entre Linhas — responsive pass
+   ========================================================= */
+
+html, body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
-* {
-  box-sizing: border-box;
+img, svg, video, canvas {
+  max-width: 100%;
 }
 
-html,
-body {
-  margin: 0;
-  padding: 0;
+button, a, input, select, textarea {
+  max-width: 100%;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.container {
+  width: min(100% - 2rem, 1180px);
+  margin-inline: auto;
+}
+
+@media (max-width: 1279px) {
+  .container {
+    width: min(100% - 2rem, 1080px);
+  }
+}
+
+@media (max-width: 1023px) {
+  .container {
+    width: min(100% - 2rem, 920px);
+  }
+
+  .section {
+    padding-block: 4.5rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .container {
+    width: min(100% - 1.5rem, 680px);
+  }
+
+  .section {
+    padding-block: 3.5rem;
+  }
+
+  h1 {
+    font-size: clamp(2.15rem, 9vw, 3.25rem);
+    line-height: 1.08;
+  }
+
+  h2 {
+    font-size: clamp(1.75rem, 7vw, 2.5rem);
+    line-height: 1.12;
+  }
+
+  h3 {
+    line-height: 1.2;
+  }
+
+  p {
+    overflow-wrap: anywhere;
+  }
+
+  input, select, textarea {
+    min-width: 0;
+  }
+}
+
+@media (max-width: 479px) {
+  .container {
+    width: min(100% - 1rem, 440px);
+  }
+
+  .section {
+    padding-block: 3rem;
+  }
+}
+
+/* Prevent common fixed-width chart/content children from forcing horizontal scroll. */
+.recharts-responsive-container,
+[class*="overflow-x"] {
+  max-width: 100%;
 }

@@ -1,17 +1,20 @@
 import "./globals.css";
-import type { Metadata, Viewport } from "next";
-
-
-export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
-};
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Entre Linhas — Compreender. Acolher. Apoiar.",
-  description: "Plataforma gratuita de informação e apoio sobre diferentes formas de aprender."
+  title: "DysHelp — Compreender. Acolher. Apoiar.",
+  description:
+    "Informação de qualidade e recursos acessíveis sobre dislexia.",
 };
 
-export default function RootLayout({children}:{children:React.ReactNode}) {
-  return <html lang="pt-BR"><body>{children}</body></html>;
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="pt-BR">
+      <body>{children}</body>
+    </html>
+  );
 }

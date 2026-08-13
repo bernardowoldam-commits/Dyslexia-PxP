@@ -40,11 +40,11 @@ function Header() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[#e7eef3] bg-white/95 backdrop-blur">
+    <header className="sticky top-0 z-50 border-b bg-white/95 backdrop-blur">
       <div className="container flex h-20 items-center justify-between">
         <a
           href="/"
-          className="font-bold text-[#234f73]"
+          className="text-xl font-extrabold tracking-tight text-[#234f73]"
         >
           DysHelp
         </a>
@@ -55,7 +55,7 @@ function Header() {
           </a>
 
           <a href="/famosos" className="nav-link">
-            Famosos
+            Histórias inspiradoras
           </a>
 
           <a href="/biblioteca" className="nav-link">
@@ -93,7 +93,7 @@ function Header() {
             </a>
 
             <a className="mobile-nav-link" href="/famosos">
-              Famosos
+              Histórias inspiradoras
             </a>
 
             <a className="mobile-nav-link" href="/biblioteca">
@@ -167,7 +167,7 @@ function AccessibilityPanel() {
                   Acessibilidade
                 </p>
 
-                <h2 className="section-title text-3xl">
+                <h2 className="text-3xl font-extrabold text-[#234f73]">
                   Ajuste sua leitura
                 </h2>
               </div>
@@ -185,6 +185,7 @@ function AccessibilityPanel() {
               <button
                 className="access-option"
                 onClick={() => setLarge(!large)}
+                type="button"
               >
                 Texto maior
                 <strong>
@@ -195,6 +196,7 @@ function AccessibilityPanel() {
               <button
                 className="access-option"
                 onClick={() => setContrast(!contrast)}
+                type="button"
               >
                 Alto contraste
                 <strong>
@@ -205,6 +207,7 @@ function AccessibilityPanel() {
               <button
                 className="access-option"
                 onClick={() => setMotion(!motion)}
+                type="button"
               >
                 Reduzir animações
                 <strong>
@@ -219,6 +222,7 @@ function AccessibilityPanel() {
                   setContrast(false);
                   setMotion(false);
                 }}
+                type="button"
               >
                 Restaurar padrão
               </button>
@@ -228,7 +232,9 @@ function AccessibilityPanel() {
       )}
     </>
   );
-}export default function Home() {
+}
+
+export default function Home() {
   const supportCards: Array<
     [React.ElementType, string, string, string, string]
   > = [
@@ -260,7 +266,7 @@ function AccessibilityPanel() {
       <Header />
 
       <main>
-        <section className="hero-section">
+        <section className="hero-section overflow-hidden">
           <div className="container grid items-center gap-12 py-16 md:grid-cols-[1.1fr_.9fr] md:py-24">
             <div className="hero-copy">
               <p className="eyebrow">
@@ -286,13 +292,6 @@ function AccessibilityPanel() {
                   Entender a dislexia
                   <ArrowRight size={18} />
                 </a>
-
-                <a
-                  href="/biblioteca"
-                  className="btn btn-soft"
-                >
-                  Explorar conteúdos
-                </a>
               </div>
 
               <div className="mt-8 flex flex-wrap gap-5 text-sm font-semibold text-[#5d7184]">
@@ -312,11 +311,11 @@ function AccessibilityPanel() {
 
             <div className="feature-card">
               <Sparkles
-                size={30}
                 className="text-[#234f73]"
+                size={30}
               />
 
-              <h2 className="mt-6">
+              <h2>
                 Você não precisa descobrir tudo sozinho.
               </h2>
 
@@ -347,102 +346,6 @@ function AccessibilityPanel() {
                   03 · Encontre apoio →
                 </a>
               </div>
-            </div>
-          </div>
-        </section>
-
-
-        <section className="section">
-          <div className="container">
-            <div className="mb-10 max-w-3xl">
-              <p className="eyebrow">
-                Por onde começar?
-              </p>
-
-              <h2 className="section-title mt-3">
-                Escolha o caminho que combina com você.
-              </h2>
-
-              <p className="section-text">
-                Não existe um único jeito de aprender.
-              </p>
-            </div>
-
-            <div className="grid gap-5 md:grid-cols-3">
-              {paths.map(([slug, title, Icon, text]) => (
-                <a
-                  href={`/${slug}`}
-                  key={slug}
-                  className="feature-card"
-                >
-                  <div className="feature-icon blue">
-                    <Icon size={30} />
-                  </div>
-
-                  <h2>
-                    {title}
-                  </h2>
-
-                  <p>
-                    {text}
-                  </p>
-
-                  <span className="card-link">
-                    Explorar
-                    <ArrowRight size={16} />
-                  </span>
-                </a>
-              ))}
-            </div>
-          </div>
-        </section>
-
-
-        <section className="about-section">
-          <div className="container grid gap-10 md:grid-cols-[.8fr_1.2fr] md:items-center">
-            <div>
-              <p className="eyebrow">
-                Estudo em destaque
-              </p>
-
-              <h2 className="section-title mt-3">
-                Entendendo a dislexia
-              </h2>
-
-              <p className="section-text">
-                Um ponto de partida para compreender, apoiar, respeitar
-                e saber quando procurar ajuda.
-              </p>
-
-              <a
-                href="/estudo/dislexia"
-                className="btn btn-blue mt-7"
-              >
-                Abrir estudo completo
-                <ArrowRight size={18} />
-              </a>
-            </div>
-
-            <div className="grid gap-4 sm:grid-cols-2">
-              {[
-                ["Compreender", "Conheça diferentes formas de aprender."],
-                ["Apoiar", "Transforme informação em estratégias."],
-                ["Respeitar", "Dificuldade não define inteligência."],
-                ["Encaminhar", "Saiba quando procurar ajuda."],
-              ].map(([title, text]) => (
-                <div
-                  key={title}
-                  className="feature-card"
-                >
-                  <h2>
-                    {title}
-                  </h2>
-
-                  <p>
-                    {text}
-                  </p>
-                </div>
-              ))}
             </div>
           </div>
         </section>

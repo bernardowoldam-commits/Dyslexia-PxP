@@ -31,31 +31,140 @@ function Header() {
               />
             </a>
 
-            <nav className="hidden md:flex items-center gap-2">
-              <a href="/" className="nav-link">
-                Início
-              </a>
+            <nav className="hidden md:flex items-center gap-3">
 
-              <a href="/estudo/dislexia" className="nav-link">
-                Dislexia
-              </a>
+  <a
+    href="/"
+    className="
+      rounded-xl
+      border
+      border-[#6997B8]/30
+      bg-white/40
+      px-5
+      py-2.5
+      text-sm
+      font-extrabold
+      text-[#234F73]
+      shadow-sm
+      transition
+      hover:bg-[#BAD8E8]
+      hover:-translate-y-0.5
+    "
+  >
+    Início
+  </a>
 
-              <a href="/atividades" className="nav-link">
-                Atividades
-              </a>
 
-              <a href="/profissionais" className="nav-link">
-                Profissionais
-              </a>
+  <a
+    href="/estudo/dislexia"
+    className="
+      rounded-xl
+      border
+      border-[#6997B8]/30
+      bg-white/40
+      px-5
+      py-2.5
+      text-sm
+      font-extrabold
+      text-[#234F73]
+      shadow-sm
+      transition
+      hover:bg-[#BAD8E8]
+      hover:-translate-y-0.5
+    "
+  >
+    Dislexia
+  </a>
 
-              <a href="/famosos" className="nav-link">
-                Histórias
-              </a>
 
-              <a href="/ajuda" className="nav-link">
-                Ajuda
-              </a>
-            </nav>
+  <a
+    href="/atividades"
+    className="
+      rounded-xl
+      border
+      border-[#6997B8]/30
+      bg-white/40
+      px-5
+      py-2.5
+      text-sm
+      font-extrabold
+      text-[#234F73]
+      shadow-sm
+      transition
+      hover:bg-[#BAD8E8]
+      hover:-translate-y-0.5
+    "
+  >
+    Atividades
+  </a>
+
+
+  <a
+    href="/profissionais"
+    className="
+      rounded-xl
+      border
+      border-[#6997B8]/30
+      bg-white/40
+      px-5
+      py-2.5
+      text-sm
+      font-extrabold
+      text-[#234F73]
+      shadow-sm
+      transition
+      hover:bg-[#BAD8E8]
+      hover:-translate-y-0.5
+    "
+  >
+    Profissionais
+  </a>
+
+
+  <a
+    href="/famosos"
+    className="
+      rounded-xl
+      border
+      border-[#6997B8]/30
+      bg-white/40
+      px-5
+      py-2.5
+      text-sm
+      font-extrabold
+      text-[#234F73]
+      shadow-sm
+      transition
+      hover:bg-[#BAD8E8]
+      hover:-translate-y-0.5
+    "
+  >
+    Histórias
+  </a>
+
+
+  <a
+    href="/ajuda"
+    className="
+      rounded-xl
+      border
+      border-[#6997B8]/30
+      bg-white/40
+      px-5
+      py-2.5
+      text-sm
+      font-extrabold
+      text-[#234F73]
+      shadow-sm
+      transition
+      hover:bg-[#BAD8E8]
+      hover:-translate-y-0.5
+    "
+  >
+    Ajuda
+  </a>
+
+</nav>
 
             <a
               href="/nia"

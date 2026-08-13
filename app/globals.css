@@ -645,7 +645,29 @@ img {
 /* =========================================================
    PREFERÊNCIA DO SISTEMA
    ========================================================= */
+/* =========================================================
+   DYSHELP — REFINAMENTO EDITORIAL
+   ========================================================= */
 
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+.display-title,
+.section-title {
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--orange);
+  color: white;
+}
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

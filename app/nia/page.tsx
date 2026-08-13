@@ -72,6 +72,7 @@ export default function Page() {
               <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#6997B8] text-white">
                 ✦
               </span>
+
               Assistente educativa DysHelp
             </div>
 
@@ -118,11 +119,43 @@ export default function Page() {
             {/* CONTEÚDO */}
             <div className="p-6 md:p-8">
 
+              {/* RESPOSTA DA NIA */}
+              {response && (
+                <div className="mb-8 rounded-3xl border border-[#6997B8]/15 bg-[#BAD8E8]/20 p-5 md:p-6">
+
+                  <div className="flex items-center gap-3">
+
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#6997B8] text-white">
+                      ✦
+                    </div>
+
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-wider text-[#6997B8]/60">
+                        NIA
+                      </p>
+
+                      <h3 className="font-bold text-[#6997B8]">
+                        Minha resposta
+                      </h3>
+                    </div>
+
+                  </div>
+
+                  <div className="mt-4 rounded-2xl bg-white p-5 md:p-6">
+                    <p className="whitespace-pre-wrap leading-8 text-[#244A6F]">
+                      {response}
+                    </p>
+                  </div>
+
+                </div>
+              )}
+
+              {/* CAMPO DE PERGUNTA */}
               <label
                 htmlFor="nia-question"
                 className="text-sm font-bold text-[#6997B8]"
               >
-                Sua pergunta
+                {response ? "Faça outra pergunta" : "Sua pergunta"}
               </label>
 
               <textarea
@@ -190,37 +223,6 @@ export default function Page() {
                 )}
 
               </div>
-
-              {/* RESPOSTA */}
-              {response && (
-                <div className="mt-8 rounded-3xl border border-[#6997B8]/15 bg-[#BAD8E8]/20 p-6 md:p-7">
-
-                  <div className="flex items-center gap-3">
-
-                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#6997B8] text-white">
-                      ✦
-                    </div>
-
-                    <div>
-                      <p className="text-xs font-bold uppercase tracking-wider text-[#6997B8]/60">
-                        NIA
-                      </p>
-
-                      <h3 className="font-bold text-[#6997B8]">
-                        Minha resposta
-                      </h3>
-                    </div>
-
-                  </div>
-
-                  <div className="mt-5 rounded-2xl bg-white p-5 md:p-6">
-                    <p className="whitespace-pre-wrap leading-8 text-[#244A6F]">
-                      {response}
-                    </p>
-                  </div>
-
-                </div>
-              )}
 
               {/* ERRO */}
               {error && (

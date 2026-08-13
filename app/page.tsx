@@ -97,7 +97,9 @@ function Header() {
   >
     Atividades
   </a>
-
+<a href="/biblioteca" className="nav-link">
+  Biblioteca
+</a>
 
   <a
     href="/profissionais"

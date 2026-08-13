@@ -10,7 +10,9 @@ export default function Page() {
   const [error, setError] = useState("");
 
   async function askNia() {
-    if (!message.trim()) {
+    const question = message.trim();
+
+    if (!question) {
       setError("Digite uma pergunta para conversar com a NIA.");
       return;
     }
@@ -26,20 +28,20 @@ export default function Page() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          message: message.trim(),
+          question,
         }),
       });
 
       const data = await res.json();
 
-      if (!res.ok || !data.ok) {
+      if (!res.ok) {
         throw new Error(
-          data.error || "Não foi possível obter uma resposta da NIA."
+          data?.error || "Não foi possível obter uma resposta da NIA."
         );
       }
 
       setResponse(
-        data.response || "A NIA não retornou uma resposta."
+        data?.answer || "A NIA não retornou uma resposta."
       );
     } catch (err) {
       setError(
@@ -64,7 +66,6 @@ export default function Page() {
       {/* HERO DA NIA */}
       <section className="bg-white">
         <div className="mx-auto max-w-6xl px-6 pb-16 pt-12 md:pb-20 md:pt-16">
-
           <div className="max-w-3xl">
 
             <div className="inline-flex items-center gap-2 rounded-full bg-[#BAD8E8]/45 px-4 py-2 text-sm font-bold text-[#6997B8]">
@@ -86,19 +87,16 @@ export default function Page() {
             </p>
 
           </div>
-
         </div>
       </section>
 
-
       {/* ÁREA DE CONVERSA */}
       <section className="px-6 py-12 md:py-16">
-
         <div className="mx-auto max-w-4xl">
 
           <div className="overflow-hidden rounded-[32px] border border-[#6997B8]/15 bg-white shadow-[0_15px_50px_rgba(54,91,116,0.10)]">
 
-            {/* CABEÇALHO DO CARD */}
+            {/* CABEÇALHO */}
             <div className="flex items-center gap-4 border-b border-[#6997B8]/10 bg-[#BAD8E8]/25 px-6 py-5 md:px-8">
 
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[#6997B8] text-xl text-white shadow-sm">
@@ -117,7 +115,6 @@ export default function Page() {
 
             </div>
 
-
             {/* CONTEÚDO */}
             <div className="p-6 md:p-8">
 
@@ -133,7 +130,10 @@ export default function Page() {
                 value={message}
                 onChange={(event) => {
                   setMessage(event.target.value);
-                  if (error) setError("");
+
+                  if (error) {
+                    setError("");
+                  }
                 }}
                 onKeyDown={(event) => {
                   if (
@@ -156,7 +156,6 @@ export default function Page() {
                 Pressione Enter para enviar ou Shift + Enter para criar uma
                 nova linha.
               </p>
-
 
               {/* BOTÕES */}
               <div className="mt-5 flex flex-wrap gap-3">
@@ -192,7 +191,6 @@ export default function Page() {
 
               </div>
 
-
               {/* RESPOSTA */}
               {response && (
                 <div className="mt-8 rounded-3xl border border-[#6997B8]/15 bg-[#BAD8E8]/20 p-6 md:p-7">
@@ -224,7 +222,6 @@ export default function Page() {
                 </div>
               )}
 
-
               {/* ERRO */}
               {error && (
                 <div
@@ -243,15 +240,11 @@ export default function Page() {
 
             </div>
           </div>
-
         </div>
-
       </section>
-
 
       {/* O QUE A NIA FAZ */}
       <section className="bg-white px-6 py-16">
-
         <div className="mx-auto max-w-6xl">
 
           <div className="max-w-2xl">
@@ -265,7 +258,6 @@ export default function Page() {
             </h2>
 
           </div>
-
 
           <div className="mt-10 grid gap-6 md:grid-cols-3">
 
@@ -286,7 +278,6 @@ export default function Page() {
 
             </article>
 
-
             <article className="rounded-3xl border border-[#F3A05B]/25 bg-[#F3EAD9] p-7">
 
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#F3A05B] text-xl text-white">
@@ -303,7 +294,6 @@ export default function Page() {
               </p>
 
             </article>
-
 
             <article className="rounded-3xl border border-[#6997B8]/15 bg-[#BAD8E8]/20 p-7">
 
@@ -323,11 +313,8 @@ export default function Page() {
             </article>
 
           </div>
-
         </div>
-
       </section>
-
 
       {/* AVISO */}
       <section className="px-6 py-12">
@@ -347,7 +334,6 @@ export default function Page() {
         </div>
 
       </section>
-
 
       {/* NAVEGAÇÃO FINAL */}
       <section className="px-6 pb-16">

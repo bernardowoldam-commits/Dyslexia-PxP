@@ -1,8 +1,12 @@
-@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap");
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* =========================================================
+   DYSHELP — SISTEMA VISUAL
+   Cormorant Garamond = títulos e identidade
+   Inter = textos e interface
+   ========================================================= */
 
 :root {
   --blue: #6997b8;
@@ -14,6 +18,10 @@
   --muted: #5d7184;
   --white: #ffffff;
 }
+
+/* =========================================================
+   BASE
+   ========================================================= */
 
 * {
   box-sizing: border-box;
@@ -27,7 +35,8 @@ body {
   margin: 0;
   background: var(--white);
   color: var(--text);
-  font-family: Inter, Arial, sans-serif;
+  font-family: var(--font-inter), Inter, Arial, sans-serif;
+  line-height: 1.5;
 }
 
 button,
@@ -51,24 +60,25 @@ select:focus-visible {
   outline-offset: 3px;
 }
 
+img {
+  max-width: 100%;
+}
+
 .container {
   width: min(1160px, calc(100% - 40px));
   margin-inline: auto;
 }
 
-.eyebrow {
-  color: var(--navy);
-  font-size: 0.78rem;
-  font-weight: 800;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-}
+/* =========================================================
+   TIPOGRAFIA
+   ========================================================= */
 
 .display-title,
 .section-title,
 .feature-card h2,
 .footer-title {
-  font-family: "Playfair Display", Georgia, serif;
+  font-family: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  font-weight: 700;
 }
 
 .display-title {
@@ -82,10 +92,34 @@ select:focus-visible {
   color: var(--orange);
 }
 
+.section-title {
+  color: var(--navy);
+  font-size: clamp(2.7rem, 5vw, 4.4rem);
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+}
+
+.eyebrow {
+  color: var(--navy);
+  font-family: var(--font-inter), Inter, Arial, sans-serif;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* =========================================================
+   HERO
+   ========================================================= */
+
 .hero-section {
   overflow: hidden;
   background:
-    radial-gradient(circle at 82% 38%, rgba(186, 216, 232, 0.22), transparent 28%),
+    radial-gradient(
+      circle at 82% 38%,
+      rgba(186, 216, 232, 0.22),
+      transparent 28%
+    ),
     linear-gradient(180deg, #ffffff 0%, #fbfdfe 100%);
 }
 
@@ -112,8 +146,8 @@ select:focus-visible {
 
 .hero-art-wrap {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 }
 
 .hero-art {
@@ -122,19 +156,27 @@ select:focus-visible {
   mix-blend-mode: multiply;
 }
 
+/* =========================================================
+   BOTÕES
+   ========================================================= */
+
 .btn {
   display: inline-flex;
   min-height: 50px;
   align-items: center;
   justify-content: center;
   gap: 9px;
+  border: 0;
   border-radius: 14px;
   padding: 12px 20px;
+  font-family: var(--font-inter), Inter, Arial, sans-serif;
   font-weight: 700;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-  cursor: pointer;
-  border: 0;
   text-decoration: none;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
 }
 
 .btn:hover {
@@ -154,8 +196,8 @@ select:focus-visible {
 
 .btn-outline-orange {
   border: 2px solid var(--orange);
-  color: #e7853d;
   background: white;
+  color: #e7853d;
 }
 
 .btn-soft {
@@ -163,9 +205,27 @@ select:focus-visible {
   color: var(--navy);
 }
 
+/* =========================================================
+   SEÇÕES
+   ========================================================= */
+
 .cream-section {
   background: var(--cream);
 }
+
+.about-section {
+  padding: 70px 0;
+  background: #fffdf9;
+}
+
+.nia-section {
+  padding: 80px 0;
+  background: #1f4768;
+}
+
+/* =========================================================
+   CARDS
+   ========================================================= */
 
 .feature-card {
   border: 1px solid rgba(105, 151, 184, 0.08);
@@ -229,16 +289,9 @@ select:focus-visible {
   color: #e7853d;
 }
 
-.about-section {
-  padding: 70px 0;
-  background: #fffdf9;
-}
-
-.section-title {
-  color: var(--navy);
-  font-size: clamp(2.7rem, 5vw, 4.4rem);
-  line-height: 1.02;
-}
+/* =========================================================
+   ILUSTRAÇÕES
+   ========================================================= */
 
 .about-art-wrap {
   display: flex;
@@ -250,10 +303,9 @@ select:focus-visible {
   mix-blend-mode: multiply;
 }
 
-.nia-section {
-  padding: 80px 0;
-  background: #1f4768;
-}
+/* =========================================================
+   NIA — PREVIEW
+   ========================================================= */
 
 .nia-preview {
   border-radius: 28px;
@@ -328,6 +380,10 @@ select:focus-visible {
   cursor: pointer;
 }
 
+/* =========================================================
+   RODAPÉ
+   ========================================================= */
+
 .footer {
   background: #173a56;
   padding: 48px 0 26px;
@@ -360,19 +416,39 @@ select:focus-visible {
   color: white;
 }
 
+/* =========================================================
+   NAVEGAÇÃO
+   ========================================================= */
+
 .nav-link {
   border: 0;
   background: transparent;
   color: var(--navy);
+  font-family: var(--font-inter), Inter, Arial, sans-serif;
   font-size: 0.9rem;
   font-weight: 600;
-  cursor: pointer;
   text-decoration: none;
+  cursor: pointer;
 }
 
 .nav-link:hover {
   color: #e7853d;
 }
+
+.mobile-nav-link {
+  display: block;
+  border: 0;
+  border-radius: 12px;
+  background: #f5f9fb;
+  padding: 13px 15px;
+  color: var(--navy);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* =========================================================
+   ACESSIBILIDADE
+   ========================================================= */
 
 .accessibility-button {
   display: inline-flex;
@@ -397,17 +473,6 @@ select:focus-visible {
   cursor: pointer;
 }
 
-.mobile-nav-link {
-  display: block;
-  border: 0;
-  border-radius: 12px;
-  background: #f5f9fb;
-  padding: 13px 15px;
-  color: var(--navy);
-  font-weight: 700;
-  text-decoration: none;
-}
-
 .access-option {
   display: flex;
   width: 100%;
@@ -425,6 +490,10 @@ select:focus-visible {
 .access-option strong {
   color: var(--blue);
 }
+
+/* =========================================================
+   MODAL NIA
+   ========================================================= */
 
 .nia-modal {
   width: min(720px, 100%);
@@ -507,6 +576,10 @@ select:focus-visible {
   cursor: wait;
 }
 
+/* =========================================================
+   ACESSIBILIDADE — CLASSES DE AJUSTE
+   ========================================================= */
+
 .large-text {
   font-size: 1.08em;
 }
@@ -531,6 +604,10 @@ select:focus-visible {
   transition-duration: 0.001ms !important;
 }
 
+/* =========================================================
+   RESPONSIVIDADE
+   ========================================================= */
+
 @media (max-width: 767px) {
   .container {
     width: min(100% - 28px, 1160px);
@@ -546,8 +623,8 @@ select:focus-visible {
 
   .nia-modal-header,
   .nia-modal-body {
-    padding-left: 20px;
     padding-right: 20px;
+    padding-left: 20px;
   }
 
   .nia-modal {
@@ -559,6 +636,10 @@ select:focus-visible {
     font-size: 1.75rem;
   }
 }
+
+/* =========================================================
+   PREFERÊNCIA DO SISTEMA
+   ========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
   html {

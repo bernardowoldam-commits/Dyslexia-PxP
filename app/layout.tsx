@@ -1,60 +1,36 @@
-"use client";
+import type { Metadata } from "next";
+import { Inter, Cormorant_Garamond } from "next/font/google";
+import "./globals.css";
 
-import {
-  Accessibility,
-  ArrowRight,
-  BookOpen,
-  Brain,
-  HeartHandshake,
-  ShieldCheck,
-  Sparkles,
-  X,
-} from "lucide-react";
-import { useEffect, useState } from "react";
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
 
-const paths: Array
-  [string, string, React.ElementType, string]
-> = [
-  [
-    "estudo/dislexia",
-    "Entenda a dislexia",
-    BookOpen,
-    "Conheça a dislexia, suas características e diferentes formas de aprendizagem.",
-  ],
-  [
-    "responsaveis",
-    "Para responsáveis",
-    HeartHandshake,
-    "Estratégias e informações para famílias e pessoas que acompanham crianças e jovens.",
-  ],
-  [
-    "profissionais",
-    "Para profissionais",
-    Brain,
-    "Materiais e caminhos para profissionais que trabalham com aprendizagem.",
-  ],
-];
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  weight: ["400", "600", "700"],
+  variable: "--font-cormorant",
+  display: "swap",
+});
 
-// mesma lista de navegação usada no cabeçalho global (app/layout.tsx)
-const navLinks: Array<[string, string]> = [
-  ["/", "Início"],
-  ["/estudo/dislexia", "Dislexia"],
-  ["/atividades", "Atividades"],
-  ["/profissionais", "Profissionais"],
-  ["/famosos", "Histórias"],
-  ["/ajuda", "Ajuda"],
-];
+export const metadata: Metadata = {
+  title: "DysHelp - Informação, acolhimento e apoio sobre dislexia",
+  description:
+    "Plataforma educativa e de apoio sobre dislexia para pessoas disléxicas, famílias e profissionais.",
+};
 
-function AccessibilityPanel() {
-  const [open, setOpen] = useState(false);
-  const [large, setLarge] = useState(false);
-  const [contrast, setContrast] = useState(false);
-  const [motion, setMotion] = useState(false);
-
-  useEffect(() => {
-    document.documentElement.classList.toggle(
-      "large-text",
-      large
-    );
-
-    document.documentElement.classLi
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="pt-BR" className={`${inter.variable} ${cormorant.variable}`}>
+      <body className="font-sans antialiased bg-slate-50 text-slate-900">
+        {children}
+      </body>
+    </html>
+  );
+}

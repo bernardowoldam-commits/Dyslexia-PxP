@@ -97,7 +97,24 @@ function Header() {
   >
     Atividades
   </a>
-<a href="/biblioteca" className="nav-link">
+<a
+  href="/biblioteca"
+  className="
+    rounded-xl
+    border
+    border-[#6997B8]/30
+    bg-white/40
+    px-5
+    py-2.5
+    text-sm
+    font-extrabold
+    text-[#234F73]
+    shadow-sm
+    transition
+    hover:bg-[#BAD8E8]
+    hover:-translate-y-0.5
+  "
+>
   Biblioteca
 </a>
 

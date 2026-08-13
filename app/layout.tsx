@@ -1,7 +1,22 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { Cormorant_Garamond, Inter } from "next/font/google";
 import "./globals.css";
+
+const cormorant = Cormorant_Garamond({
+  subsets: ["latin"],
+  variable: "--font-cormorant",
+  display: "swap",
+  weight: ["400", "500", "600", "700"],
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+  weight: ["400", "500", "600", "700", "800"],
+});
 
 export const metadata: Metadata = {
   title: "DysHelp",
@@ -16,16 +31,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body className="bg-[#F3EAD9] text-[#6997B8] antialiased">
-
+      <body
+        className={`${cormorant.variable} ${inter.variable} bg-[#F3EAD9] text-[#6997B8] antialiased`}
+      >
         {/* BARRA PRINCIPAL FIXA */}
         <header className="fixed inset-x-0 top-0 z-[100] px-3 pt-3 sm:px-5">
           <div className="mx-auto max-w-7xl">
-
             <div className="rounded-[24px] border border-[#6997B8]/15 bg-[#F3EAD9]/95 shadow-[0_8px_30px_rgba(54,91,116,0.10)] backdrop-blur-xl">
-
               <div className="flex min-h-[76px] items-center justify-between gap-4 px-4 sm:px-6">
-
                 {/* LOGO */}
                 <Link
                   href="/"
@@ -47,7 +60,6 @@ export default function RootLayout({
                   className="hidden items-center gap-1 md:flex"
                   aria-label="Navegação principal"
                 >
-
                   <Link
                     href="/"
                     className="rounded-full px-4 py-2.5 text-sm font-bold text-[#6997B8] transition-all hover:bg-[#BAD8E8]/50 hover:text-[#244A6F]"
@@ -82,7 +94,6 @@ export default function RootLayout({
                   >
                     Ajuda
                   </Link>
-
                 </nav>
 
                 {/* NIA */}
@@ -97,17 +108,14 @@ export default function RootLayout({
 
                   <span>NIA</span>
                 </Link>
-
               </div>
 
               {/* MENU MOBILE */}
               <div className="border-t border-[#6997B8]/10 px-4 pb-3 pt-2 md:hidden">
-
                 <nav
                   className="flex gap-2 overflow-x-auto pb-1"
                   aria-label="Navegação móvel"
                 >
-
                   <Link
                     href="/"
                     className="shrink-0 rounded-full bg-white/60 px-4 py-2 text-sm font-bold text-[#6997B8]"
@@ -142,11 +150,8 @@ export default function RootLayout({
                   >
                     Ajuda
                   </Link>
-
                 </nav>
-
               </div>
-
             </div>
           </div>
         </header>
@@ -155,10 +160,7 @@ export default function RootLayout({
         <div className="h-[104px] sm:h-[108px]" />
 
         {/* CONTEÚDO */}
-        <main>
-          {children}
-        </main>
-
+        <main>{children}</main>
       </body>
     </html>
   );

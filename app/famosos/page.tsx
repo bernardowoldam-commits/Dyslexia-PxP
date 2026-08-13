@@ -132,12 +132,13 @@ export default function FamososPage() {
                   >
                     <div className="aspect-[16/10] w-full overflow-hidden bg-cream">
                       {person.image_url ? (
-                        <img
-                          src={person.image_url}
-                          alt={`Foto de ${person.name}`}
-                          className="h-full w-full object-cover"
-                          loading="lazy"
-                        />
+                        <div className="relative h-full w-full">
+                          <img
+                            src={person.image_url}
+                            alt={`Foto de ${person.name}`}
+                            className="absolute inset-0 h-full w-full object-cover"
+                          />
+                        </div>
                       ) : (
                         <div className="flex h-full items-center justify-center">
                           <span className="text-7xl font-black text-deep/15">
@@ -164,7 +165,7 @@ export default function FamososPage() {
                         {person.description}
                       </p>
 
-                      {person.article_url && (
+                      {person.article_url ? (
                         <div className="mt-6">
                           {person.article_url.startsWith("/") ? (
                             <Link
@@ -183,6 +184,12 @@ export default function FamososPage() {
                               Ler a matéria →
                             </a>
                           )}
+                        </div>
+                      ) : (
+                        <div className="mt-6">
+                          <span className="inline-flex rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-500">
+                            Matéria em preparação
+                          </span>
                         </div>
                       )}
                     </div>

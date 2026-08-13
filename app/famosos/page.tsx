@@ -12,6 +12,25 @@ type FamousPerson = {
   article_url: string | null;
 };
 
+function getArticleUrl(person: FamousPerson) {
+  if (person.article_url) {
+    return person.article_url;
+  }
+
+  const slugs: Record<string, string> = {
+    "Carol W. Greider": "carol-greider",
+    "Whoopi Goldberg": "whoopi-goldberg",
+    "Muhammad Ali": "muhammad-ali",
+    "Tom Cruise": "tom-cruise",
+    "Tom Holland": "tom-holland",
+    "Richard Branson": "richard-branson",
+  };
+
+  const slug = slugs[person.name];
+
+  return slug ? `/famosos/${slug}` : null;
+}
+
 export default function FamososPage() {
   const [people, setPeople] = useState<FamousPerson[]>([]);
   const [loading, setLoading] = useState(true);
@@ -125,119 +144,108 @@ export default function FamososPage() {
 
             {!loading && !error && people.length > 0 && (
               <section className="mt-12 grid gap-8 md:grid-cols-2">
-                {people.map((person) => (
-                  <article
-                    key={person.id}
-                    className="overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
-                  >
-                    <div className="aspect-[16/10] w-full overflow-hidden bg-cream">
-                      {person.image_url ? (
-                        <div className="relative h-full w-full">
+                {people.map((person) => {
+                  const articleUrl = getArticleUrl(person);
+
+                  const imageProxyUrl = person.image_url
+                    ? `/api/famous-people/image?url=${encodeURIComponent(
+                        person.image_url
+                      )}`
+                    : null;
+
+                  return (
+                    <article
+                      key={person.id}
+                      className="overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+                    >
+                      <div className="aspect-[16/10] w-full overflow-hidden bg-cream">
+                        {imageProxyUrl ? (
                           <img
-                            src={person.image_url}
+                            src={imageProxyUrl}
                             alt={`Foto de ${person.name}`}
-                            className="absolute inset-0 h-full w-full object-cover"
+                            className="h-full w-full object-cover"
                           />
-                        </div>
-                      ) : (
-                        <div className="flex h-full items-center justify-center">
-                          <span className="text-7xl font-black text-deep/15">
-                            {person.name
-                              .split(" ")
-                              .map((word) => word[0])
-                              .slice(0, 2)
-                              .join("")}
-                          </span>
-                        </div>
-                      )}
-                    </div>
+                        ) : (
+                          <div className="flex h-full items-center justify-center">
+                            <span className="text-7xl font-black text-deep/15">
+                              {person.name
+                                .split(" ")
+                                .map((word) => word[0])
+                                .slice(0, 2)
+                                .join("")}
+                            </span>
+                          </div>
+                        )}
+                      </div>
 
-                    <div className="p-7 md:p-8">
-                      <p className="text-sm font-bold uppercase tracking-[.16em] text-slate-500">
-                        {person.category}
-                      </p>
+                      <div className="p-7 md:p-8">
+                        <p className="text-sm font-bold uppercase tracking-[.16em] text-slate-500">
+                          {person.category}
+                        </p>
 
-                      <h2 className="mt-2 text-3xl font-extrabold text-deep">
-                        {person.name}
-                      </h2>
+                        <h2 className="mt-2 text-3xl font-extrabold text-deep">
+                          {person.name}
+                        </h2>
 
-                      <p className="mt-4 text-lg leading-8 text-slate-600">
-                        {person.description}
-                      </p>
+                        <p className="mt-4 text-lg leading-8 text-slate-600">
+                          {person.description}
+                        </p>
 
-                      {person.article_url ? (
-                        <div className="mt-6">
-                          {person.article_url.startsWith("/") ? (
+                        {articleUrl && (
+                          <div className="mt-6">
                             <Link
-                              href={person.article_url}
+                              href={articleUrl}
                               className="btn btn-primary"
                             >
                               Ler a matéria →
                             </Link>
-                          ) : (
-                            <a
-                              href={person.article_url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="btn btn-primary"
-                            >
-                              Ler a matéria →
-                            </a>
-                          )}
-                        </div>
-                      ) : (
-                        <div className="mt-6">
-                          <span className="inline-flex rounded-full bg-slate-100 px-4 py-2 text-sm font-semibold text-slate-500">
-                            Matéria em preparação
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  </article>
-                ))}
+                          </div>
+                        )}
+                      </div>
+                    </article>
+                  );
+                })}
               </section>
             )}
 
-            {!loading && !error && people.length > 0 && (
-              <section className="mt-10 rounded-3xl border border-slate-200 p-7 md:p-9">
-                <h2 className="text-2xl font-extrabold text-deep">
-                  O que queremos mostrar
-                </h2>
+            <section className="mt-10 rounded-3xl border border-slate-200 p-7 md:p-9">
+              <h2 className="text-2xl font-extrabold text-deep">
+                O que queremos mostrar
+              </h2>
 
-                <div className="mt-6 grid gap-5 md:grid-cols-3">
-                  <div className="rounded-2xl bg-slate-50 p-6">
-                    <h3 className="text-xl font-extrabold text-deep">
-                      Possibilidades
-                    </h3>
+              <div className="mt-6 grid gap-5 md:grid-cols-3">
+                <div className="rounded-2xl bg-slate-50 p-6">
+                  <h3 className="text-xl font-extrabold text-deep">
+                    Possibilidades
+                  </h3>
 
-                    <p className="mt-3 leading-7 text-slate-600">
-                      A pessoa é muito maior do que a dificuldade que enfrenta.
-                    </p>
-                  </div>
-
-                  <div className="rounded-2xl bg-slate-50 p-6">
-                    <h3 className="text-xl font-extrabold text-deep">
-                      Persistência
-                    </h3>
-
-                    <p className="mt-3 leading-7 text-slate-600">
-                      Aprender pode exigir caminhos diferentes, apoio e tempo.
-                    </p>
-                  </div>
-
-                  <div className="rounded-2xl bg-slate-50 p-6">
-                    <h3 className="text-xl font-extrabold text-deep">
-                      Respeito
-                    </h3>
-
-                    <p className="mt-3 leading-7 text-slate-600">
-                      Uma história de sucesso não deve virar uma cobrança para
-                      outras pessoas.
-                    </p>
-                  </div>
+                  <p className="mt-3 leading-7 text-slate-600">
+                    A pessoa é muito maior do que a dificuldade que enfrenta.
+                  </p>
                 </div>
-              </section>
-            )}
+
+                <div className="rounded-2xl bg-slate-50 p-6">
+                  <h3 className="text-xl font-extrabold text-deep">
+                    Persistência
+                  </h3>
+
+                  <p className="mt-3 leading-7 text-slate-600">
+                    Aprender pode exigir caminhos diferentes, apoio e tempo.
+                  </p>
+                </div>
+
+                <div className="rounded-2xl bg-slate-50 p-6">
+                  <h3 className="text-xl font-extrabold text-deep">
+                    Respeito
+                  </h3>
+
+                  <p className="mt-3 leading-7 text-slate-600">
+                    Uma história de sucesso não deve virar uma cobrança para
+                    outras pessoas.
+                  </p>
+                </div>
+              </div>
+            </section>
 
             <aside className="mt-10 rounded-3xl bg-deep p-7 text-white md:p-9">
               <h2 className="text-2xl font-extrabold">

@@ -13,80 +13,106 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 
-const paths = [
-  {
-    href: "/estudo/dislexia",
-    title: "Entenda a dislexia",
-    icon: BookOpen,
-    text: "Conheça a dislexia, suas características e diferentes formas de aprendizagem.",
-  },
-  {
-    href: "/responsaveis",
-    title: "Para responsáveis",
-    icon: HeartHandshake,
-    text: "Estratégias e informações para famílias e pessoas que acompanham crianças e jovens.",
-  },
-  {
-    href: "/profissionais",
-    title: "Para profissionais",
-    icon: Brain,
-    text: "Materiais e caminhos para profissionais que trabalham com aprendizagem.",
-  },
+const paths: Array<
+  [string, string, React.ElementType, string]
+> = [
+  [
+    "estudo/dislexia",
+    "Entenda a dislexia",
+    BookOpen,
+    "Conheça a dislexia, suas características e diferentes formas de aprendizagem.",
+  ],
+  [
+    "responsaveis",
+    "Para responsáveis",
+    HeartHandshake,
+    "Estratégias e informações para famílias e pessoas que acompanham crianças e jovens.",
+  ],
+  [
+    "profissionais",
+    "Para profissionais",
+    Brain,
+    "Materiais e caminhos para profissionais que trabalham com aprendizagem.",
+  ],
 ];
 
 function Header() {
   const [open, setOpen] = useState(false);
 
-  const links = [
-    ["Entenda a dislexia", "/estudo/dislexia"],
-    ["Famosos", "/famosos"],
-    ["Biblioteca", "/biblioteca"],
-    ["Ajuda", "/ajuda"],
-    ["NIA", "/nia"],
-    ["Sobre", "/sobre"],
-  ];
-
   return (
-    <header className="sticky top-0 z-50 border-b bg-white/95 backdrop-blur">
+    <header className="sticky top-0 z-50 border-b border-[#e7eef3] bg-white/95 backdrop-blur">
       <div className="container flex h-20 items-center justify-between">
         <a
           href="/"
-          className="font-extrabold tracking-tight text-deep text-xl"
+          className="font-bold text-[#234f73]"
         >
           DysHelp
         </a>
 
-        <nav className="hidden gap-6 md:flex">
-          {links.map(([label, href]) => (
-            <a
-              key={href}
-              href={href}
-              className="font-semibold text-deep"
-            >
-              {label}
-            </a>
-          ))}
+        <nav className="hidden items-center gap-6 md:flex">
+          <a href="/estudo/dislexia" className="nav-link">
+            Entenda a dislexia
+          </a>
+
+          <a href="/famosos" className="nav-link">
+            Famosos
+          </a>
+
+          <a href="/biblioteca" className="nav-link">
+            Biblioteca
+          </a>
+
+          <a href="/ajuda" className="nav-link">
+            Ajuda
+          </a>
+
+          <a href="/nia" className="nav-link">
+            NIA
+          </a>
+
+          <a href="/sobre" className="nav-link">
+            Sobre
+          </a>
         </nav>
 
         <button
-          type="button"
-          className="rounded-xl p-2 md:hidden"
+          className="icon-button md:hidden"
           onClick={() => setOpen(!open)}
+          aria-label="Abrir menu"
+          type="button"
         >
-          {open ? <X /> : <Menu />}
+          {open ? <X size={26} /> : <Menu size={26} />}
         </button>
       </div>
 
       {open && (
-        <div className="border-t bg-white p-6 md:hidden">
-          <nav className="grid gap-4">
-            {links.map(([label, href]) => (
-              <a key={href} href={href}>
-                {label}
-              </a>
-            ))}
-          </nav>
-        </div>
+        <nav className="border-t bg-white px-6 py-5 md:hidden">
+          <div className="container grid gap-4">
+            <a className="mobile-nav-link" href="/estudo/dislexia">
+              Entenda a dislexia
+            </a>
+
+            <a className="mobile-nav-link" href="/famosos">
+              Famosos
+            </a>
+
+            <a className="mobile-nav-link" href="/biblioteca">
+              Biblioteca
+            </a>
+
+            <a className="mobile-nav-link" href="/ajuda">
+              Ajuda
+            </a>
+
+            <a className="mobile-nav-link" href="/nia">
+              NIA
+            </a>
+
+            <a className="mobile-nav-link" href="/sobre">
+              Sobre
+            </a>
+          </div>
+        </nav>
       )}
     </header>
   );
@@ -118,58 +144,83 @@ function AccessibilityPanel() {
   return (
     <>
       <button
-        className="btn btn-soft"
         onClick={() => setOpen(true)}
+        className="accessibility-button"
+        type="button"
       >
         <Accessibility size={18} />
         Acessibilidade
       </button>
 
       {open && (
-        <div className="fixed inset-0 z-50 bg-black/30 p-5">
-          <aside className="ml-auto mt-10 max-w-sm rounded-3xl bg-white p-6 shadow-2xl">
-            <div className="flex justify-between">
+        <div
+          className="fixed inset-0 z-[80] bg-black/30 p-4"
+          onClick={() => setOpen(false)}
+        >
+          <aside
+            className="nia-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="nia-modal-header">
               <div>
                 <p className="eyebrow">
                   Acessibilidade
                 </p>
 
-                <h2 className="text-2xl font-bold text-deep">
+                <h2 className="section-title text-3xl">
                   Ajuste sua leitura
                 </h2>
               </div>
 
-              <button onClick={() => setOpen(false)}>
+              <button
+                className="icon-button"
+                onClick={() => setOpen(false)}
+                type="button"
+              >
                 <X />
               </button>
             </div>
-                        <div className="mt-6 grid gap-3">
+
+            <div className="nia-modal-body grid gap-3">
               <button
-                className="btn btn-soft justify-between"
+                className="access-option"
                 onClick={() => setLarge(!large)}
               >
                 Texto maior
-                <span>{large ? "Ativo" : "Inativo"}</span>
+                <strong>
+                  {large ? "Ativo" : "Inativo"}
+                </strong>
               </button>
 
               <button
-                className="btn btn-soft justify-between"
+                className="access-option"
                 onClick={() => setContrast(!contrast)}
               >
                 Alto contraste
-                <span>
+                <strong>
                   {contrast ? "Ativo" : "Inativo"}
-                </span>
+                </strong>
               </button>
 
               <button
-                className="btn btn-soft justify-between"
+                className="access-option"
                 onClick={() => setMotion(!motion)}
               >
-                Menos animações
-                <span>
+                Reduzir animações
+                <strong>
                   {motion ? "Ativo" : "Inativo"}
-                </span>
+                </strong>
+              </button>
+
+              <button
+                className="btn btn-blue"
+                onClick={() => {
+                  setLarge(false);
+                  setContrast(false);
+                  setMotion(false);
+                }}
+              >
+                Restaurar padrão
               </button>
             </div>
           </aside>
@@ -177,226 +228,221 @@ function AccessibilityPanel() {
       )}
     </>
   );
-}
+}export default function Home() {
+  const supportCards: Array<
+    [React.ElementType, string, string, string, string]
+  > = [
+    [
+      Brain,
+      "NIA",
+      "Uma futura camada de inteligência artificial educativa, construída com limites claros.",
+      "/nia",
+      "Conhecer a NIA",
+    ],
+    [
+      ShieldCheck,
+      "Ajuda especializada",
+      "Links para organizações, registros profissionais e diretórios de busca.",
+      "/ajuda",
+      "Encontrar apoio",
+    ],
+    [
+      BookOpen,
+      "Biblioteca",
+      "Textos curtos para ler e consultar quando precisar.",
+      "/biblioteca",
+      "Abrir biblioteca",
+    ],
+  ];
 
-export default function Home() {
   return (
     <div className="min-h-screen bg-white">
       <Header />
 
       <main>
-        <section className="gradient-hero overflow-hidden">
-          <div className="container grid gap-12 py-20 md:grid-cols-2">
-            <div>
+        <section className="hero-section">
+          <div className="container grid items-center gap-12 py-16 md:grid-cols-[1.1fr_.9fr] md:py-24">
+            <div className="hero-copy">
               <p className="eyebrow">
                 DysHelp
               </p>
 
-              <h1 className="mt-5 text-5xl font-extrabold leading-tight text-deep md:text-7xl">
+              <h1 className="display-title mt-4">
                 Compreender é o primeiro passo para transformar.
               </h1>
 
-              <p className="mt-6 text-lg leading-8 text-slate-600">
-                Informação, acolhimento e ferramentas para
-                pessoas com dislexia, famílias, escolas e
-                profissionais.
+              <div className="orange-line" />
+
+              <p className="hero-text">
+                Informação, acolhimento e ferramentas para pessoas com
+                dislexia, famílias, escolas e profissionais.
+              </p>
+
+              <div className="mt-8 flex flex-wrap gap-3">
+                <a
+                  href="/estudo/dislexia"
+                  className="btn btn-orange"
+                >
+                  Entender a dislexia
+                  <ArrowRight size={18} />
+                </a>
+
+                <a
+                  href="/biblioteca"
+                  className="btn btn-soft"
+                >
+                  Explorar conteúdos
+                </a>
+              </div>
+
+              <div className="mt-8 flex flex-wrap gap-5 text-sm font-semibold text-[#5d7184]">
+                <span>
+                  ✓ Conteúdo educativo
+                </span>
+
+                <span>
+                  ✓ Navegação acessível
+                </span>
+
+                <span>
+                  ✓ Gratuito para começar
+                </span>
+              </div>
+            </div>
+
+            <div className="feature-card">
+              <Sparkles
+                size={30}
+                className="text-[#234f73]"
+              />
+
+              <h2 className="mt-6">
+                Você não precisa descobrir tudo sozinho.
+              </h2>
+
+              <p>
+                Comece por onde fizer mais sentido. O DysHelp reúne
+                informação, estratégias e caminhos de apoio.
+              </p>
+
+              <div className="mt-7 grid gap-3">
+                <a
+                  href="/estudo/dislexia"
+                  className="rounded-2xl bg-[#f3ead9] p-4 font-bold text-[#234f73]"
+                >
+                  01 · Entenda →
+                </a>
+
+                <a
+                  href="/famosos"
+                  className="rounded-2xl bg-[#edf5f9] p-4 font-bold text-[#234f73]"
+                >
+                  02 · Inspire-se →
+                </a>
+
+                <a
+                  href="/ajuda"
+                  className="rounded-2xl bg-[#edf5f9] p-4 font-bold text-[#234f73]"
+                >
+                  03 · Encontre apoio →
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+
+
+        <section className="section">
+          <div className="container">
+            <div className="mb-10 max-w-3xl">
+              <p className="eyebrow">
+                Por onde começar?
+              </p>
+
+              <h2 className="section-title mt-3">
+                Escolha o caminho que combina com você.
+              </h2>
+
+              <p className="section-text">
+                Não existe um único jeito de aprender.
+              </p>
+            </div>
+
+            <div className="grid gap-5 md:grid-cols-3">
+              {paths.map(([slug, title, Icon, text]) => (
+                <a
+                  href={`/${slug}`}
+                  key={slug}
+                  className="feature-card"
+                >
+                  <div className="feature-icon blue">
+                    <Icon size={30} />
+                  </div>
+
+                  <h2>
+                    {title}
+                  </h2>
+
+                  <p>
+                    {text}
+                  </p>
+
+                  <span className="card-link">
+                    Explorar
+                    <ArrowRight size={16} />
+                  </span>
+                </a>
+              ))}
+            </div>
+          </div>
+        </section>
+
+
+        <section className="about-section">
+          <div className="container grid gap-10 md:grid-cols-[.8fr_1.2fr] md:items-center">
+            <div>
+              <p className="eyebrow">
+                Estudo em destaque
+              </p>
+
+              <h2 className="section-title mt-3">
+                Entendendo a dislexia
+              </h2>
+
+              <p className="section-text">
+                Um ponto de partida para compreender, apoiar, respeitar
+                e saber quando procurar ajuda.
               </p>
 
               <a
                 href="/estudo/dislexia"
-                className="btn btn-primary mt-8"
+                className="btn btn-blue mt-7"
               >
-                Entender a dislexia
+                Abrir estudo completo
                 <ArrowRight size={18} />
               </a>
             </div>
 
-            <div className="card p-8">
-              <Sparkles
-                size={32}
-                className="text-deep"
-              />
-
-              <h2 className="mt-6 text-3xl font-bold text-deep">
-                Você não precisa descobrir tudo sozinho.
-              </h2>
-
-              <p className="mt-4 leading-8 text-slate-600">
-                Encontre informação confiável, estratégias e
-                caminhos de apoio.
-              </p>
-            </div>
-          </div>
-        </section>
-
-
-        <section className="section">
-          <div className="container">
-            <p className="eyebrow">
-              Por onde começar?
-            </p>
-
-            <h2 className="mt-3 text-4xl font-bold text-deep">
-              Escolha o caminho que combina com você.
-            </h2>
-
-            <div className="mt-10 grid gap-5 md:grid-cols-3">
-              {paths.map((item) => {
-                const Icon = item.icon;
-
-                return (
-                  <a
-                    href={item.href}
-                    key={item.href}
-                    className="card p-7"
-                  >
-                    <Icon
-                      size={32}
-                      className="text-deep"
-                    />
-
-                    <h3 className="mt-5 text-2xl font-bold text-deep">
-                      {item.title}
-                    </h3>
-
-                    <p className="mt-3 leading-7 text-slate-600">
-                      {item.text}
-                    </p>
-
-                    <span className="mt-5 inline-flex gap-2 font-bold text-deep">
-                      Explorar
-                      <ArrowRight size={16} />
-                    </span>
-                  </a>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
-
-        <section className="section bg-cream">
-          <div className="container">
-            <p className="eyebrow">
-              Estudo em destaque
-            </p>
-
-            <h2 className="mt-3 text-5xl font-bold text-deep">
-              Entendendo a dislexia
-            </h2>
-
-            <p className="mt-5 max-w-3xl text-lg leading-8 text-slate-600">
-              Um ponto de partida para compreender,
-              apoiar e respeitar diferentes formas de
-              aprendizagem.
-            </p>
-          </div>
-        </section>
-                <section className="section">
-          <div className="container">
-            <div className="rounded-[2rem] bg-deep p-10 text-white">
-              <p className="uppercase tracking-widest text-white/60">
-                Histórias que inspiram
-              </p>
-
-              <h2 className="mt-4 text-4xl font-bold">
-                Pessoas famosas também tiveram caminhos diferentes.
-              </h2>
-
-              <p className="mt-4 text-white/70">
-                Conheça histórias públicas sem transformar
-                sucesso em comparação.
-              </p>
-
-              <a
-                href="/famosos"
-                className="btn btn-sun mt-7"
-              >
-                Ver histórias
-              </a>
-            </div>
-          </div>
-        </section>
-
-
-        <section className="section bg-slate-50">
-          <div className="container grid gap-5 md:grid-cols-3">
-            {[
-              [
-                Brain,
-                "NIA",
-                "Uma futura camada de inteligência artificial educativa.",
-              ],
-              [
-                ShieldCheck,
-                "Ajuda especializada",
-                "Links e caminhos para encontrar apoio.",
-              ],
-              [
-                BookOpen,
-                "Biblioteca",
-                "Textos curtos para consulta.",
-              ],
-            ].map(([Icon, title, text]) => {
-              const IconComponent =
-                Icon as React.ElementType;
-
-              return (
+            <div className="grid gap-4 sm:grid-cols-2">
+              {[
+                ["Compreender", "Conheça diferentes formas de aprender."],
+                ["Apoiar", "Transforme informação em estratégias."],
+                ["Respeitar", "Dificuldade não define inteligência."],
+                ["Encaminhar", "Saiba quando procurar ajuda."],
+              ].map(([title, text]) => (
                 <div
-                  className="card p-7"
-                  key={String(title)}
+                  key={title}
+                  className="feature-card"
                 >
-                  <IconComponent
-                    size={32}
-                    className="text-deep"
-                  />
-
-                  <h3 className="mt-5 text-2xl font-bold text-deep">
+                  <h2>
                     {title}
-                  </h3>
+                  </h2>
 
-                  <p className="mt-3 text-slate-600">
+                  <p>
                     {text}
                   </p>
                 </div>
-              );
-            })}
-          </div>
-        </section>
-
-
-        <section className="section">
-          <div className="container card flex flex-col gap-5 p-8 md:flex-row md:justify-between">
-            <div>
-              <p className="eyebrow">
-                Acessibilidade
-              </p>
-
-              <h2 className="mt-3 text-3xl font-bold text-deep">
-                Faça o site funcionar melhor para você.
-              </h2>
+              ))}
             </div>
-
-            <AccessibilityPanel />
           </div>
         </section>
-      </main>
-            <footer className="bg-deep py-12 text-white">
-        <div className="container">
-          <h2 className="text-xl font-bold">
-            DysHelp
-          </h2>
-
-          <p className="mt-3 text-white/70">
-            Informação, acolhimento e caminhos de apoio
-            para diferentes formas de aprendizagem.
-          </p>
-
-          <div className="mt-8 border-t border-white/10 pt-5 text-sm text-white/50">
-            © 2026 DysHelp. Todos os direitos reservados.
-          </div>
-        </div>
-      </footer>
-    </div>
-  );
-}

@@ -615,12 +615,19 @@ md:grid-cols-3
 
 
 {paths.map(
-([href,title,Icon,text])=>(
+([slug, title, Icon, text]) => (
 <a
 
-key={href}
+key={slug}
 
-href={`/${href}`}
+href={`/${slug}`}
+
+className="
+feature-card
+group
+"
+
+>
 
 className="
 feature-card

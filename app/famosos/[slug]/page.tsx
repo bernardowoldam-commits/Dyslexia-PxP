@@ -1,3 +1,13 @@
+import Link from "next/link";
+
+type Article = {
+  name: string;
+  category: string;
+  title: string;
+  introduction: string;
+  paragraphs: string[];
+};
+
 const articles: Record<string, Article> = {
   "carol-greider": {
     name: "Carol W. Greider",
@@ -5,12 +15,12 @@ const articles: Record<string, Article> = {
     title:
       "Carol W. Greider: ciência, descoberta e uma forma diferente de aprender",
     introduction:
-      "Carol W. Greider é uma cientista norte-americana reconhecida mundialmente por suas pesquisas sobre telômeros e telomerase, trabalho que contribuiu para importantes avanços na biologia celular e que lhe rendeu o Prêmio Nobel de Fisiologia ou Medicina. Sua trajetória também representa uma história de persistência, curiosidade e diferentes formas de aprender.",
+      "Carol W. Greider é uma cientista norte-americana vencedora do Prêmio Nobel de Fisiologia ou Medicina. Sua trajetória mostra como diferentes formas de aprender podem coexistir com excelência acadêmica, criatividade e grandes descobertas.",
     paragraphs: [
-      "Durante sua vida escolar, Greider enfrentou desafios relacionados à leitura e ao processamento de informações. Como acontece com muitas pessoas com dislexia, seu caminho de aprendizagem não seguia necessariamente os métodos tradicionais utilizados no ambiente escolar.",
-      "Apesar das dificuldades, ela desenvolveu uma forte curiosidade científica e encontrou maneiras próprias de compreender problemas complexos. A ciência exige criatividade, observação e capacidade de enxergar possibilidades diferentes — características importantes em qualquer processo de descoberta.",
-      "Sua carreira levou a uma das descobertas mais importantes da biologia moderna: o estudo da telomerase, uma enzima relacionada à manutenção dos telômeros. Seu trabalho ajudou a ampliar o conhecimento sobre células, envelhecimento e doenças.",
-      "A história de Carol W. Greider mostra que uma dificuldade de aprendizagem não representa falta de inteligência ou potencial. Com apoio, estratégias adequadas e oportunidades, diferentes formas de pensar podem gerar contribuições extraordinárias.",
+      "Durante sua trajetória escolar, Greider enfrentou desafios relacionados à leitura e ao processamento de informações. Como muitas pessoas com dislexia, sua experiência de aprendizagem não seguia necessariamente os métodos tradicionais.",
+      "Ao longo de sua formação, desenvolveu estratégias próprias para compreender problemas complexos e encontrou na ciência um espaço para sua curiosidade e criatividade.",
+      "Seu trabalho sobre telômeros e telomerase transformou a compreensão da biologia celular e trouxe contribuições importantes para a ciência moderna.",
+      "Sua história reforça que dificuldades de aprendizagem não representam falta de capacidade. Com apoio e oportunidades adequadas, diferentes maneiras de pensar podem gerar grandes contribuições.",
     ],
   },
 
@@ -18,14 +28,14 @@ const articles: Record<string, Article> = {
     name: "Whoopi Goldberg",
     category: "Cinema e televisão",
     title:
-      "Whoopi Goldberg: criatividade, comunicação e uma trajetória construída além da dislexia",
+      "Whoopi Goldberg: criatividade, comunicação e uma trajetória além da dislexia",
     introduction:
-      "Whoopi Goldberg é atriz, comediante, apresentadora e uma das personalidades mais reconhecidas do entretenimento mundial. Ela também compartilhou publicamente sua experiência com dislexia e os desafios que enfrentou durante sua formação.",
+      "Whoopi Goldberg é atriz, comediante, apresentadora e uma das personalidades mais reconhecidas do entretenimento mundial. Ela também falou publicamente sobre sua experiência com dislexia.",
     paragraphs: [
-      "Durante sua infância e juventude, Goldberg teve dificuldades relacionadas à leitura e ao ambiente escolar. Como muitas pessoas com dislexia, enfrentou situações em que suas capacidades não eram totalmente compreendidas.",
-      "Com o tempo, encontrou no teatro e na comunicação formas de expressar sua criatividade. Sua carreira mostrou que talentos podem aparecer de maneiras diferentes e que habilidades artísticas, emocionais e comunicativas também possuem grande valor.",
-      "Ao longo de décadas, Goldberg participou de filmes, programas de televisão e produções teatrais, tornando-se uma referência cultural em diferentes gerações.",
-      "Sua história reforça uma mensagem importante: pessoas com dislexia não precisam ser definidas por suas dificuldades, mas reconhecidas por suas habilidades, interesses e possibilidades.",
+      "Durante sua infância e juventude, Goldberg enfrentou dificuldades relacionadas ao ambiente escolar e à leitura.",
+      "Com o tempo, encontrou na atuação uma forma de expressar sua criatividade, comunicação e talento artístico.",
+      "Sua carreira inclui cinema, televisão e teatro, tornando-a uma referência cultural para diferentes gerações.",
+      "Sua história mostra que uma dificuldade de aprendizagem não deve ser vista como uma definição da capacidade ou do futuro de uma pessoa.",
     ],
   },
 
@@ -33,14 +43,14 @@ const articles: Record<string, Article> = {
     name: "Muhammad Ali",
     category: "Esporte e história",
     title:
-      "Muhammad Ali: determinação, identidade e uma trajetória que inspirou gerações",
+      "Muhammad Ali: determinação, talento e uma trajetória que inspirou gerações",
     introduction:
-      "Muhammad Ali foi um dos maiores boxeadores da história e uma das figuras públicas mais influentes do século XX. Além de seu desempenho esportivo, ficou conhecido por sua personalidade, sua comunicação e sua postura diante dos desafios.",
+      "Muhammad Ali foi um dos maiores boxeadores da história e uma das figuras públicas mais influentes do século XX.",
     paragraphs: [
-      "Ali teve uma trajetória marcada por obstáculos desde cedo. Sua história é frequentemente relacionada a dificuldades de aprendizagem, mostrando que desafios escolares não impedem necessariamente uma pessoa de desenvolver talentos extraordinários.",
-      "Dentro e fora dos ringues, Ali demonstrou confiança, criatividade e uma capacidade única de comunicação. Ele transformou sua personalidade em uma de suas maiores forças.",
-      "Sua carreira esportiva trouxe conquistas históricas, mas seu impacto ultrapassou o esporte. Ele se tornou uma referência mundial de coragem, posicionamento e perseverança.",
-      "Para o DysHelp, histórias como a de Ali lembram que cada pessoa possui uma combinação única de dificuldades, habilidades e formas de contribuir para o mundo.",
+      "Sua trajetória foi marcada por desafios desde cedo e sua história é frequentemente relacionada a dificuldades de aprendizagem.",
+      "Dentro e fora dos ringues, Ali demonstrou confiança, inteligência emocional e uma capacidade única de comunicação.",
+      "Além das conquistas esportivas, tornou-se uma referência mundial por sua personalidade e posicionamento social.",
+      "Sua história lembra que cada pessoa possui diferentes habilidades e que dificuldades em uma área não eliminam talentos em outras.",
     ],
   },
 
@@ -50,12 +60,12 @@ const articles: Record<string, Article> = {
     title:
       "Tom Cruise: estratégias de aprendizagem e uma carreira construída com persistência",
     introduction:
-      "Tom Cruise é um dos atores mais conhecidos do cinema mundial. Ele já falou publicamente sobre sua experiência com dislexia e sobre os desafios que enfrentou durante sua educação.",
+      "Tom Cruise é um dos atores mais conhecidos do cinema mundial e já falou publicamente sobre sua experiência com dislexia.",
     paragraphs: [
-      "Durante sua infância e adolescência, Cruise relatou dificuldades relacionadas à leitura e ao acompanhamento de métodos tradicionais de ensino. Essas experiências influenciaram sua maneira de estudar e aprender.",
-      "Ao longo do tempo, desenvolveu estratégias próprias para lidar com esses desafios e continuou buscando oportunidades para desenvolver seus talentos.",
-      "Sua carreira no cinema cresceu ao longo de décadas, envolvendo grandes produções, diferentes estilos de atuação e reconhecimento internacional.",
-      "Sua história mostra que encontrar métodos adequados de aprendizagem e receber apoio podem fazer diferença na construção da confiança e do desenvolvimento pessoal.",
+      "Durante sua educação, Cruise relatou dificuldades relacionadas à leitura e aos métodos tradicionais de ensino.",
+      "Com o tempo, encontrou estratégias próprias para estudar e desenvolver suas habilidades.",
+      "Sua carreira cinematográfica cresceu ao longo de décadas, tornando-o uma das maiores estrelas internacionais do cinema.",
+      "Sua trajetória demonstra a importância de encontrar caminhos personalizados de aprendizagem.",
     ],
   },
 
@@ -65,12 +75,12 @@ const articles: Record<string, Article> = {
     title:
       "Tom Holland: juventude, talento e diferentes caminhos para aprender",
     introduction:
-      "Tom Holland é um ator britânico conhecido internacionalmente por seus trabalhos no cinema e no teatro. Ele também falou sobre sua experiência pessoal com dislexia.",
+      "Tom Holland é um ator britânico conhecido mundialmente e também compartilhou sua experiência com dislexia.",
     paragraphs: [
-      "Desde jovem, Holland esteve envolvido com atividades artísticas e encontrou na atuação uma forma de desenvolver suas habilidades e expressar sua criatividade.",
-      "Sua experiência mostra que crianças e adolescentes com dislexia podem desenvolver talentos em diferentes áreas quando encontram ambientes que valorizam suas capacidades.",
-      "Além do cinema, Holland também representa uma nova geração de pessoas públicas que falam mais abertamente sobre diferenças de aprendizagem.",
-      "Sua trajetória reforça que a dislexia faz parte da história de uma pessoa, mas não determina seus sonhos, sua personalidade ou seu futuro.",
+      "Desde jovem, Holland encontrou na arte uma maneira de desenvolver suas habilidades e expressar sua criatividade.",
+      "Sua trajetória mostra como ambientes que valorizam diferentes talentos podem ajudar pessoas com diferentes formas de aprendizagem.",
+      "Como parte de uma nova geração de artistas, ele contribui para ampliar as conversas sobre diferenças cognitivas.",
+      "Sua história reforça que a dislexia faz parte da trajetória de uma pessoa, mas não determina seus limites.",
     ],
   },
 
@@ -78,14 +88,113 @@ const articles: Record<string, Article> = {
     name: "Richard Branson",
     category: "Empreendedorismo",
     title:
-      "Richard Branson: empreendedorismo, criatividade e uma nova visão sobre aprender",
+      "Richard Branson: criatividade, empreendedorismo e uma nova visão sobre aprender",
     introduction:
-      "Richard Branson é um empresário britânico conhecido pela criação de diversos negócios e por falar abertamente sobre sua experiência com dislexia.",
+      "Richard Branson é um empresário britânico conhecido mundialmente e fala abertamente sobre sua experiência com dislexia.",
     paragraphs: [
-      "Durante sua vida escolar, Branson enfrentou dificuldades relacionadas ao ensino tradicional. Ele relata que nem sempre se adaptava aos métodos convencionais de aprendizagem.",
-      "Segundo sua própria trajetória, encontrou forças em áreas como criatividade, comunicação, liderança e capacidade de enxergar oportunidades.",
-      "Ao longo dos anos, construiu empresas em diferentes setores e tornou-se uma das figuras mais conhecidas do empreendedorismo mundial.",
-      "Sua história é importante porque mostra que existem diferentes formas de inteligência e que ambientes adequados podem permitir que diferentes perfis desenvolvam seu potencial.",
+      "Durante sua vida escolar, Branson enfrentou dificuldades com métodos tradicionais de ensino.",
+      "Ele destaca frequentemente a importância da criatividade, comunicação e capacidade de enxergar oportunidades.",
+      "Sua trajetória empresarial o tornou uma das figuras mais conhecidas do empreendedorismo mundial.",
+      "Sua história ajuda a mostrar que existem diferentes formas de inteligência e diferentes caminhos para desenvolver potencial.",
     ],
   },
 };
+
+export default async function FamousPersonArticle({
+  params,
+}: {
+  params: {
+    slug: string;
+  };
+}) {
+  const article = articles[params.slug];
+
+  if (!article) {
+    return (
+      <main className="min-h-screen bg-white">
+        <section className="section">
+          <div className="container">
+            <h1 className="text-4xl font-extrabold text-deep">
+              História não encontrada
+            </h1>
+
+            <Link
+              href="/famosos"
+              className="btn btn-primary mt-6"
+            >
+              Voltar
+            </Link>
+          </div>
+        </section>
+      </main>
+    );
+  }
+
+  return (
+    <main className="min-h-screen bg-white">
+      <header className="border-b border-slate-200">
+        <div className="container flex min-h-[76px] items-center justify-between">
+          <Link href="/" className="text-xl font-extrabold text-deep">
+            DysHelp
+          </Link>
+
+          <Link href="/famosos" className="btn btn-soft">
+            ← Voltar
+          </Link>
+        </div>
+      </header>
+
+      <article className="section">
+        <div className="container">
+          <div className="mx-auto max-w-4xl">
+
+            <p className="eyebrow">
+              {article.category}
+            </p>
+
+            <h1 className="mt-4 text-4xl font-extrabold text-deep md:text-6xl">
+              {article.title}
+            </h1>
+
+            <p className="mt-6 text-xl leading-9 text-slate-600">
+              {article.introduction}
+            </p>
+
+            <div className="mt-10 space-y-8">
+              {article.paragraphs.map((paragraph, index) => (
+                <p
+                  key={index}
+                  className="text-lg leading-9 text-slate-700"
+                >
+                  {paragraph}
+                </p>
+              ))}
+            </div>
+
+            <aside className="mt-12 rounded-3xl bg-deep p-8 text-white">
+              <h2 className="text-2xl font-extrabold">
+                Uma história não define todas as pessoas
+              </h2>
+
+              <p className="mt-4 leading-8 text-white/80">
+                Estas histórias existem para inspirar e informar. Cada pessoa
+                com dislexia possui uma trajetória única, com diferentes
+                desafios, habilidades e formas de aprender.
+              </p>
+            </aside>
+
+            <div className="mt-10">
+              <Link
+                href="/famosos"
+                className="btn btn-primary"
+              >
+                Ver outras histórias →
+              </Link>
+            </div>
+
+          </div>
+        </div>
+      </article>
+    </main>
+  );
+}

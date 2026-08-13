@@ -402,15 +402,36 @@ export default function Home() {
 
             </div>
 
+<div className="feature-card overflow-hidden">
 
-            <div className="feature-card">
+  <img
+    src="/tom-cruise.png"
+    alt="Tom Cruise"
+    className="
+      w-full
+      h-64
+      rounded-2xl
+      object-cover
+      mb-5
+    "
+  />
 
-              <Users size={38}/>
+  <Users
+    size={38}
+    className="text-[#6997B8]"
+  />
 
+  <h2 className="mt-3">
+    Tom Cruise
+  </h2>
 
-              <h2>
-                Tom Cruise
-              </h2>
+  <p>
+    Uma história frequentemente associada à superação de
+    dificuldades escolares e busca por estratégias próprias
+    de aprendizagem.
+  </p>
+
+</div>
 
 
               <p>

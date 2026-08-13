@@ -1,109 +1,172 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
-  Accessibility,
   ArrowRight,
   BookOpen,
   Brain,
   HeartHandshake,
-  Menu,
-  ShieldCheck,
   Sparkles,
-  X,
+  Users,
+  Accessibility,
 } from "lucide-react";
 
-const paths: Array<[string, string, React.ElementType, string]> = [
-  [
-    "/estudo/dislexia",
-    "Entenda a dislexia",
-    BookOpen,
-    "Conheça a dislexia, suas características e diferentes formas de aprendizagem.",
-  ],
-  [
-    "/responsaveis",
-    "Para responsáveis",
-    HeartHandshake,
-    "Estratégias e informações para famílias e pessoas que acompanham crianças e jovens.",
-  ],
-  [
-    "/profissionais",
-    "Para profissionais",
-    Brain,
-    "Materiais e caminhos para profissionais que trabalham com aprendizagem.",
-  ],
-];
-
-const supportCards: Array<[React.ElementType, string, string, string, string]> = [
-  [
-    Brain,
-    "NIA",
-    "Uma futura camada de inteligência artificial educativa, construída com limites claros.",
-    "/nia",
-    "Conhecer a NIA",
-  ],
-  [
-    ShieldCheck,
-    "Ajuda especializada",
-    "Links para organizações, registros profissionais e diretórios de busca.",
-    "/ajuda",
-    "Encontrar apoio",
-  ],
-  [
-    BookOpen,
-    "Biblioteca",
-    "Textos curtos para ler e consultar quando precisar.",
-    "/biblioteca",
-    "Abrir biblioteca",
-  ],
-];
-
-function Header() {
-  const [open, setOpen] = useState(false);
-
+export default function Home() {
   return (
-    <header className="sticky top-0 z-50 border-b bg-white/95 backdrop-blur">
-      <div className="container flex h-20 items-center justify-between">
-        <Link
-          href="/"
-          className="text-xl font-extrabold tracking-tight text-[#234f73]"
-        >
-          DysHelp
-        </Link>
+    <main>
+      {/* Hero Section */}
+      <section className="hero-section">
+        <div className="container grid gap-12 py-20 md:grid-cols-2 md:items-center">
+          <div className="hero-copy">
+            <p className="eyebrow">DysHelp</p>
+            <h1 className="display-title mt-5">
+              Compreender a aprendizagem é transformar possibilidades.
+            </h1>
+            <div className="orange-line" />
+            <p className="hero-text">
+              Uma plataforma criada para informar, acolher e conectar pessoas com
+              dislexia, famílias, escolas e profissionais.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-4">
+              <Link href="/estudo/dislexia" className="btn btn-blue">
+                Explorar dislexia
+                <ArrowRight size={18} />
+              </Link>
+              <Link href="/famosos" className="btn btn-outline-orange">
+                Histórias reais
+              </Link>
+            </div>
+          </div>
 
-        <nav className="hidden items-center gap-6 md:flex">
-          <Link href="/estudo/dislexia" className="nav-link">
-            Entenda a dislexia
-          </Link>
-          <Link href="/famosos" className="nav-link">
-            Histórias inspiradoras
-          </Link>
-          <Link href="/biblioteca" className="nav-link">
-            Biblioteca
-          </Link>
-          <Link href="/ajuda" className="nav-link">
-            Ajuda
-          </Link>
-          <Link href="/nia" className="nav-link">
-            NIA
-          </Link>
-          <Link href="/sobre" className="nav-link">
-            Sobre
-          </Link>
-        </nav>
+          <div className="feature-card">
+            <Sparkles className="text-[#f3a05b]" size={36} />
+            <h2>Aprender diferente não significa aprender menos.</h2>
+            <p>
+              Cada pessoa possui uma forma própria de interpretar, organizar e
+              construir conhecimento.
+            </p>
+            <div className="mt-6 grid gap-3">
+              <Link href="/nia" className="card-link">
+                Conhecer a NIA
+                <ArrowRight size={16} />
+              </Link>
+              <Link href="/ajuda" className="card-link orange-link">
+                Encontrar apoio
+                <ArrowRight size={16} />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
 
-        <button
-          className="icon-button md:hidden"
-          onClick={() => setOpen(!open)}
-          aria-label="Abrir menu"
-          type="button"
-        >
-          {open ? <X size={26} /> : <Menu size={26} />}
-        </button>
-      </div>
+      {/* Seção Caminhos */}
+      <section className="section">
+        <div className="container">
+          <p className="eyebrow">Caminhos</p>
+          <h2 className="section-title mt-3">
+            Encontre o conteúdo certo para sua jornada.
+          </h2>
 
-      {open && (
-        <nav className="border-t bg-white px-6 py-5 md:hidden">
-          <div className="container grid gap-4">
-            <Link className="mobile-nav-link
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
+            <Link href="/estudo/dislexia" className="feature-card">
+              <div className="feature-icon blue">
+                <BookOpen size={24} />
+              </div>
+              <h2>Entenda a dislexia</h2>
+              <p>
+                Informações claras sobre características, desafios e diferentes
+                formas de aprendizagem.
+              </p>
+              <span className="card-link">
+                Explorar <ArrowRight size={16} />
+              </span>
+            </Link>
+
+            <Link href="/responsaveis" className="feature-card">
+              <div className="feature-icon blue">
+                <HeartHandshake size={24} />
+              </div>
+              <h2>Famílias e responsáveis</h2>
+              <p>
+                Estratégias para acompanhar, acolher e apoiar crianças e jovens.
+              </p>
+              <span className="card-link">
+                Explorar <ArrowRight size={16} />
+              </span>
+            </Link>
+
+            <Link href="/profissionais" className="feature-card">
+              <div className="feature-icon blue">
+                <Brain size={24} />
+              </div>
+              <h2>Profissionais</h2>
+              <p>
+                Conteúdos para educadores e especialistas envolvidos na
+                aprendizagem.
+              </p>
+              <span className="card-link">
+                Explorar <ArrowRight size={16} />
+              </span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Seção Histórias */}
+      <section className="cream-section py-20">
+        <div className="container grid gap-8 md:grid-cols-2">
+          <div>
+            <p className="eyebrow">Histórias que inspiram</p>
+            <h2 className="section-title mt-3">
+              Pessoas conhecidas também percorreram caminhos diferentes.
+            </h2>
+            <p className="section-text">
+              Conheça trajetórias públicas de pessoas que falaram sobre suas
+              experiências com aprendizagem e dislexia.
+            </p>
+            <Link href="/famosos" className="btn btn-orange mt-6">
+              Ver histórias
+              <ArrowRight size={24} />
+            </Link>
+          </div>
+
+          <div className="feature-card">
+            <Users size={38} />
+            <h2>Tom Cruise</h2>
+            <p>
+              Uma história frequentemente associada à superação de dificuldades
+              escolares e busca por estratégias próprias de aprendizagem.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Seção Acessibilidade */}
+      <section className="section">
+        <div className="container">
+          <div className="feature-card flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+            <div>
+              <p className="eyebrow">Acessibilidade</p>
+              <h2>Personalize sua experiência.</h2>
+              <p>Ajuste leitura, contraste e movimento conforme sua necessidade.</p>
+            </div>
+            <button className="btn btn-blue" type="button">
+              <Accessibility size={18} />
+              Acessibilidade
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Rodapé */}
+      <footer className="footer">
+        <div className="container">
+          <h2 className="footer-title">DysHelp</h2>
+          <p className="mt-3">
+            Informação, acolhimento e apoio para uma aprendizagem mais inclusiva.
+          </p>
+        </div>
+      </footer>
+    </main>
+  );
+}

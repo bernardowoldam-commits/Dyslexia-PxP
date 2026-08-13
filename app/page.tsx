@@ -1,105 +1,17 @@
 "use client";
 
 import {
-  Accessibility,
   ArrowRight,
+  Accessibility,
   BookOpen,
   Brain,
   HeartHandshake,
-  Menu,
-  ShieldCheck,
   Sparkles,
+  ShieldCheck,
+  Users,
   X,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-
-const paths: Array<
-  [string, string, React.ElementType, string]
-> = [
-  [
-    "estudo/dislexia",
-    "Entenda a dislexia",
-    BookOpen,
-    "Conheça a dislexia, suas características e diferentes formas de aprendizagem.",
-  ],
-  [
-    "responsaveis",
-    "Para responsáveis",
-    HeartHandshake,
-    "Estratégias e informações para famílias e pessoas que acompanham crianças e jovens.",
-  ],
-  [
-    "profissionais",
-    "Para profissionais",
-    Brain,
-    "Materiais e caminhos para profissionais que trabalham com aprendizagem.",
-  ],
-];
-
-function Header() {
-  const [open, setOpen] = useState(false);
-
-  return (
-    <header className="sticky top-0 z-50 border-b bg-white/95 backdrop-blur">
-      <div className="container flex h-20 items-center justify-between">
-        <a
-          href="/"
-          className="text-xl font-extrabold tracking-tight text-deep"
-        >
-          Dyslexia Tortuguitas
-        </a>
-
-        <nav className="hidden items-center gap-6 md:flex">
-          <a href="/estudo/dislexia" className="font-semibold">
-            Entenda a dislexia
-          </a>
-
-          <a href="/famosos" className="font-semibold">
-            Famosos
-          </a>
-
-          <a href="/biblioteca" className="font-semibold">
-            Biblioteca
-          </a>
-
-          <a href="/ajuda" className="font-semibold">
-            Ajuda
-          </a>
-
-          <a href="/nia" className="font-semibold">
-            NIA
-          </a>
-
-          <a href="/sobre" className="font-semibold">
-            Sobre
-          </a>
-        </nav>
-
-        <button
-          className="rounded-xl p-2 md:hidden"
-          onClick={() => setOpen(!open)}
-          aria-label="Abrir menu"
-          type="button"
-        >
-          {open ? <X size={26} /> : <Menu size={26} />}
-        </button>
-      </div>
-
-      {open && (
-        <nav className="border-t bg-white px-6 py-5 md:hidden">
-          <div className="container grid gap-4">
-            <a href="/estudo/dislexia">Entenda a dislexia</a>
-            <a href="/famosos">Famosos</a>
-            <a href="/biblioteca">Biblioteca</a>
-            <a href="/ajuda">Ajuda</a>
-            <a href="/nia">NIA</a>
-            <a href="/sobre">Sobre</a>
-          </div>
-        </nav>
-      )}
-    </header>
-  );
-}
 
 function AccessibilityPanel() {
   const [open, setOpen] = useState(false);
@@ -108,16 +20,27 @@ function AccessibilityPanel() {
   const [motion, setMotion] = useState(false);
 
   useEffect(() => {
-    document.documentElement.classList.toggle("large-text", large);
-    document.documentElement.classList.toggle("contrast", contrast);
-    document.documentElement.classList.toggle("no-motion", motion);
+    document.documentElement.classList.toggle(
+      "large-text",
+      large
+    );
+
+    document.documentElement.classList.toggle(
+      "high-contrast",
+      contrast
+    );
+
+    document.documentElement.classList.toggle(
+      "reduce-motion",
+      motion
+    );
   }, [large, contrast, motion]);
 
   return (
     <>
       <button
+        className="btn btn-blue"
         onClick={() => setOpen(true)}
-        className="btn btn-soft"
         type="button"
       >
         <Accessibility size={18} />
@@ -126,26 +49,21 @@ function AccessibilityPanel() {
 
       {open && (
         <div
-          className="fixed inset-0 z-[80] bg-black/30 p-4"
+          className="fixed inset-0 z-50 bg-black/30 p-5"
           onClick={() => setOpen(false)}
         >
-          <aside
-            className="ml-auto mt-16 w-full max-w-sm rounded-3xl bg-white p-6 shadow-2xl"
+          <div
+            className="mx-auto mt-20 max-w-md rounded-3xl bg-white p-7 shadow-xl"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex justify-between">
-              <div>
-                <p className="eyebrow">Acessibilidade</p>
-
-                <h2 className="text-2xl font-extrabold text-deep">
-                  Ajuste sua leitura
-                </h2>
-              </div>
+              <h2 className="text-2xl font-bold text-[#234f73]">
+                Ajustes de leitura
+              </h2>
 
               <button
-                onClick={() => setOpen(false)}
                 type="button"
-                aria-label="Fechar acessibilidade"
+                onClick={() => setOpen(false)}
               >
                 <X />
               </button>
@@ -153,391 +71,305 @@ function AccessibilityPanel() {
 
             <div className="mt-6 grid gap-3">
               <button
-                className="btn btn-soft justify-between"
+                className="access-option"
                 onClick={() => setLarge(!large)}
-                type="button"
               >
                 Texto maior
-                <span>{large ? "Ativo" : "Inativo"}</span>
+                <strong>
+                  {large ? "Ativo" : "Off"}
+                </strong>
               </button>
 
               <button
-                className="btn btn-soft justify-between"
+                className="access-option"
                 onClick={() => setContrast(!contrast)}
-                type="button"
               >
                 Alto contraste
-                <span>{contrast ? "Ativo" : "Inativo"}</span>
+                <strong>
+                  {contrast ? "Ativo" : "Off"}
+                </strong>
               </button>
 
               <button
-                className="btn btn-soft justify-between"
+                className="access-option"
                 onClick={() => setMotion(!motion)}
-                type="button"
               >
-                Reduzir animações
-                <span>{motion ? "Ativo" : "Inativo"}</span>
-              </button>
-
-              <button
-                className="btn btn-primary"
-                onClick={() => {
-                  setLarge(false);
-                  setContrast(false);
-                  setMotion(false);
-                }}
-                type="button"
-              >
-                Restaurar padrão
+                Menos animações
+                <strong>
+                  {motion ? "Ativo" : "Off"}
+                </strong>
               </button>
             </div>
-          </aside>
+          </div>
         </div>
       )}
     </>
   );
 }
 
+const cards = [
+  {
+    icon: BookOpen,
+    title: "Entenda a dislexia",
+    text:
+      "Informações claras sobre características, desafios e diferentes formas de aprendizagem.",
+    link: "/estudo/dislexia",
+  },
+  {
+    icon: HeartHandshake,
+    title: "Famílias e responsáveis",
+    text:
+      "Estratégias para acompanhar, acolher e apoiar crianças e jovens.",
+    link: "/responsaveis",
+  },
+  {
+    icon: Brain,
+    title: "Profissionais",
+    text:
+      "Conteúdos para educadores e especialistas envolvidos na aprendizagem.",
+    link: "/profissionais",
+  },
+];
+
 export default function Home() {
-  const supportCards: Array<
-    [React.ElementType, string, string, string, string]
-  > = [
-    [
-      Brain,
-      "NIA",
-      "Uma futura camada de inteligência artificial educativa, construída com limites claros.",
-      "/nia",
-      "Conhecer a NIA",
-    ],
-    [
-      ShieldCheck,
-      "Ajuda especializada",
-      "Links para organizações, registros profissionais e diretórios de busca.",
-      "/ajuda",
-      "Encontrar apoio",
-    ],
-    [
-      BookOpen,
-      "Biblioteca",
-      "Textos curtos para ler e consultar quando precisar.",
-      "/biblioteca",
-      "Abrir biblioteca",
-    ],
-  ];
-
   return (
-    <div className="min-h-screen bg-white">
-      <Header />
+    <main>
 
-      <main>
-        {/* HERO */}
-        <section className="gradient-hero overflow-hidden">
-          <div className="container grid items-center gap-12 py-16 md:grid-cols-[1.1fr_.9fr] md:py-24">
-            <div className="reveal">
-              <p className="eyebrow">Dyslexia Tortuguitas</p>
+      <section className="hero-section">
+        <div className="container grid gap-12 py-20 md:grid-cols-2 md:items-center">
 
-              <h1 className="mt-4 max-w-4xl text-5xl font-extrabold leading-[1.02] tracking-[-.045em] text-deep md:text-7xl">
-                Compreender é o primeiro passo para transformar.
-              </h1>
+          <div className="hero-copy">
 
-              <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600 md:text-xl">
-                Informação, acolhimento e ferramentas para pessoas com
-                dislexia, famílias, escolas e profissionais.
-              </p>
+            <p className="eyebrow">
+              DysHelp
+            </p>
 
-              <div className="mt-8 flex flex-wrap gap-3">
-                <a
-                  href="/estudo/dislexia"
-                  className="btn btn-primary"
-                >
-                  Entender a dislexia
-                  <ArrowRight size={18} />
-                </a>
-              </div>
+            <h1 className="display-title mt-5">
+              Compreender a aprendizagem é transformar possibilidades.
+            </h1>
 
-              <div className="mt-8 flex flex-wrap gap-5 text-sm font-semibold text-slate-600">
-                <span>✓ Conteúdo educativo</span>
-                <span>✓ Navegação acessível</span>
-                <span>✓ Gratuito para começar</span>
-              </div>
-            </div>
+            <div className="orange-line" />
 
-            <div className="card relative overflow-hidden p-7 md:p-9">
-              <Sparkles className="text-deep" size={30} />
+            <p className="hero-text">
+              Uma plataforma criada para informar, acolher e conectar
+              pessoas com dislexia, famílias, escolas e profissionais.
+            </p>
 
-              <h2 className="mt-6 text-3xl font-extrabold text-deep">
-                Você não precisa descobrir tudo sozinho.
-              </h2>
-
-              <p className="mt-4 leading-8 text-slate-600">
-                Comece por onde fizer mais sentido. O site reúne informação,
-                estratégias e caminhos de apoio.
-              </p>
-
-              <div className="mt-7 grid gap-3">
-                <a
-                  href="/estudo/dislexia"
-                  className="rounded-2xl bg-cream p-4 font-bold text-deep"
-                >
-                  01 · Entenda →
-                </a>
-
-                <a
-                  href="/famosos"
-                  className="rounded-2xl bg-slate-50 p-4 font-bold text-deep"
-                >
-                  02 · Inspire-se →
-                </a>
-
-                <a
-                  href="/ajuda"
-                  className="rounded-2xl bg-slate-50 p-4 font-bold text-deep"
-                >
-                  03 · Encontre apoio →
-                </a>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* CAMINHOS */}
-        <section className="section">
-          <div className="container">
-            <div className="mb-10 max-w-3xl">
-              <p className="eyebrow">Por onde começar?</p>
-
-              <h2 className="mt-3 text-3xl font-extrabold text-deep md:text-5xl">
-                Escolha o caminho que combina com você.
-              </h2>
-
-              <p className="mt-4 text-lg leading-8 text-slate-600">
-                Não existe um único jeito de aprender.
-              </p>
-            </div>
-
-            <div className="grid gap-5 md:grid-cols-3">
-              {paths.map(([slug, title, Icon, text]) => (
-                <a
-                  href={`/${slug}`}
-                  key={slug}
-                  className="card group p-7"
-                >
-                  <Icon className="text-deep" size={30} />
-
-                  <h3 className="mt-6 text-2xl font-extrabold text-deep">
-                    {title}
-                  </h3>
-
-                  <p className="mt-3 leading-7 text-slate-600">
-                    {text}
-                  </p>
-
-                  <span className="mt-6 inline-flex gap-2 font-bold text-deep">
-                    Explorar
-                    <ArrowRight size={16} />
-                  </span>
-                </a>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* ESTUDO */}
-        <section className="section bg-cream">
-          <div className="container grid gap-10 md:grid-cols-[.8fr_1.2fr] md:items-center">
-            <div>
-              <p className="eyebrow">Estudo em destaque</p>
-
-              <h2 className="mt-3 text-3xl font-extrabold text-deep md:text-5xl">
-                Entendendo a dislexia
-              </h2>
-
-              <p className="mt-5 text-lg leading-8 text-slate-600">
-                Um ponto de partida para compreender, apoiar, respeitar e
-                saber quando procurar ajuda.
-              </p>
+            <div className="mt-8 flex flex-wrap gap-4">
 
               <a
                 href="/estudo/dislexia"
-                className="btn btn-primary mt-7"
+                className="btn btn-blue"
               >
-                Abrir estudo completo
-                <ArrowRight size={18} />
+                Explorar dislexia
+                <ArrowRight size={18}/>
               </a>
-            </div>
 
-            <div className="grid gap-4 sm:grid-cols-2">
-              {[
-                ["Compreender", "Conheça diferentes formas de aprender."],
-                ["Apoiar", "Transforme informação em estratégias."],
-                ["Respeitar", "Dificuldade não define inteligência."],
-                ["Encaminhar", "Saiba quando procurar ajuda."],
-              ].map(([title, text]) => (
-                <div
-                  key={title}
-                  className="rounded-3xl bg-white p-6"
-                >
-                  <h3 className="text-xl font-extrabold text-deep">
-                    {title}
-                  </h3>
-
-                  <p className="mt-2 leading-7 text-slate-600">
-                    {text}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* FAMOSOS */}
-        <section className="section">
-          <div className="container">
-            <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
-              <div>
-                <p className="eyebrow">Histórias que inspiram</p>
-
-                <h2 className="mt-3 text-3xl font-extrabold text-deep md:text-5xl">
-                  Famosos também tiveram caminhos diferentes.
-                </h2>
-
-                <p className="mt-4 max-w-2xl text-lg leading-8 text-slate-600">
-                  Conheça histórias públicas de pessoas que falaram sobre
-                  dislexia.
-                </p>
-              </div>
-
-              <a href="/famosos" className="btn btn-soft">
-                Ver histórias
-                <ArrowRight size={18} />
+              <a
+                href="/famosos"
+                className="btn btn-outline-orange"
+              >
+                Histórias reais
               </a>
+
             </div>
 
-            <div className="mt-8 rounded-[2rem] bg-deep p-8 text-white md:p-10">
-              <div className="grid gap-8 md:grid-cols-[.4fr_1fr_auto] md:items-center">
-                <div className="text-7xl font-black text-white/15">
-                  TC
-                </div>
+          </div>
 
-                <div>
-                  <p className="text-sm font-bold uppercase tracking-[.16em] text-white/60">
-                    Cinema · exemplo público
-                  </p>
 
-                  <h3 className="mt-2 text-3xl font-extrabold">
-                    Tom Cruise
-                  </h3>
+          <div className="feature-card">
 
-                  <p className="mt-3 max-w-2xl leading-7 text-white/80">
-                    Uma trajetória conhecida de perseverança, apresentada
-                    sem transformar sucesso em comparação.
-                  </p>
-                </div>
+            <Sparkles
+              size={36}
+              className="text-[#f3a05b]"
+            />
 
-                <a href="/famosos" className="btn btn-sun">
-                  Conhecer
-                  <ArrowRight size={18} />
-                </a>
-              </div>
+            <h2>
+              Aprender diferente não significa aprender menos.
+            </h2>
+
+            <p>
+              Cada pessoa possui uma forma própria de interpretar,
+              organizar e construir conhecimento.
+            </p>
+
+            <div className="mt-6 grid gap-3">
+
+              <a
+                href="/nia"
+                className="card-link"
+              >
+                Conhecer a NIA
+                <ArrowRight size={16}/>
+              </a>
+
+              <a
+                href="/ajuda"
+                className="card-link orange-link"
+              >
+                Encontrar apoio
+                <ArrowRight size={16}/>
+              </a>
+
             </div>
+
           </div>
-        </section>
 
-        {/* RECURSOS */}
-        <section className="section bg-slate-50">
-          <div className="container grid gap-5 md:grid-cols-3">
-            {supportCards.map(
-              ([Icon, title, description, href, label], index) => (
-                <div key={index} className="card p-7">
-                  <Icon className="text-deep" size={30} />
+        </div>
+      </section>
 
-                  <h3 className="mt-5 text-2xl font-extrabold text-deep">
-                    {title}
-                  </h3>
 
-                  <p className="mt-3 leading-7 text-slate-600">
-                    {description}
-                  </p>
-
-                  <a
-                    href={href}
-                    className="mt-5 inline-flex gap-2 font-bold text-deep"
-                  >
-                    {label}
-                    <ArrowRight size={16} />
-                  </a>
-                </div>
-              )
-            )}
-          </div>
-        </section>
-
-        {/* ACESSIBILIDADE */}
-        <section className="section">
-          <div className="container">
-            <div className="card flex flex-col gap-6 p-7 md:flex-row md:items-center md:justify-between md:p-10">
-              <div>
-                <p className="eyebrow">Acessibilidade</p>
-
-                <h2 className="mt-2 text-3xl font-extrabold text-deep">
-                  Faça o site funcionar melhor para você.
-                </h2>
-
-                <p className="mt-3 max-w-2xl leading-7 text-slate-600">
-                  Ajuste o tamanho do texto, o contraste e as animações
-                  conforme sua preferência.
-                </p>
-              </div>
-
-              <AccessibilityPanel />
-            </div>
-          </div>
-        </section>
-      </main>
-
-      {/* RODAPÉ */}
-      <footer className="border-t bg-deep py-12 text-white">
+      <section className="section">
         <div className="container">
-          <div className="grid gap-8 md:grid-cols-3">
+
+          <p className="eyebrow">
+            Caminhos
+          </p>
+
+          <h2 className="section-title mt-3">
+            Encontre o conteúdo certo para sua jornada.
+          </h2>
+
+
+          <div className="mt-10 grid gap-6 md:grid-cols-3">
+
+            {cards.map((item) => {
+
+              const Icon = item.icon;
+
+              return (
+                <a
+                  href={item.link}
+                  key={item.title}
+                  className="feature-card"
+                >
+
+                  <div className="feature-icon blue">
+                    <Icon />
+                  </div>
+
+                  <h2>
+                    {item.title}
+                  </h2>
+
+                  <p>
+                    {item.text}
+                  </p>
+
+                  <span className="card-link">
+                    Explorar
+                    <ArrowRight size={16}/>
+                  </span>
+
+                </a>
+              );
+
+            })}
+
+          </div>
+
+        </div>
+      </section>
+
+
+      <section className="cream-section py-20">
+
+        <div className="container grid gap-8 md:grid-cols-2">
+
+          <div>
+
+            <p className="eyebrow">
+              Histórias que inspiram
+            </p>
+
+            <h2 className="section-title mt-3">
+              Pessoas conhecidas também percorreram caminhos diferentes.
+            </h2>
+
+            <p className="section-text">
+              Conheça trajetórias públicas de pessoas que falaram sobre
+              suas experiências com aprendizagem e dislexia.
+            </p>
+
+            <a
+              href="/famosos"
+              className="btn btn-orange mt-6"
+            >
+              Ver histórias
+              <ArrowRight />
+            </a>
+
+          </div>
+
+
+          <div className="feature-card">
+
+            <Users size={38}/>
+
+            <h2>
+              Tom Cruise
+            </h2>
+
+            <p>
+              Uma história frequentemente associada à superação de
+              dificuldades escolares e busca por estratégias próprias
+              de aprendizagem.
+            </p>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <section className="section">
+
+        <div className="container">
+
+          <div className="feature-card flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+
             <div>
-              <h2 className="text-xl font-extrabold">
-                Dyslexia Tortuguitas
+
+              <p className="eyebrow">
+                Acessibilidade
+              </p>
+
+              <h2>
+                Personalize sua experiência.
               </h2>
 
-              <p className="mt-3 max-w-sm leading-7 text-white/70">
-                Informação, acolhimento e caminhos de apoio para uma
-                aprendizagem mais inclusiva.
+              <p>
+                Ajuste leitura, contraste e movimento conforme sua necessidade.
               </p>
+
             </div>
 
-            <div>
-              <h3 className="font-bold">Explorar</h3>
+            <AccessibilityPanel />
 
-              <div className="mt-3 grid gap-2 text-white/70">
-                <a href="/estudo/dislexia">Entenda a dislexia</a>
-                <a href="/famosos">Famosos</a>
-                <a href="/biblioteca">Biblioteca</a>
-                <a href="/entre-linhas">Entre Linhas</a>
-              </div>
-            </div>
-
-            <div>
-              <h3 className="font-bold">Ajuda</h3>
-
-              <div className="mt-3 grid gap-2 text-white/70">
-                <a href="/ajuda">Ajuda especializada</a>
-                <a href="/responsaveis">Responsáveis</a>
-                <a href="/profissionais">Profissionais</a>
-                <a href="/sobre">Sobre nós</a>
-              </div>
-            </div>
           </div>
 
-          <div className="mt-10 border-t border-white/10 pt-6 text-sm text-white/50">
-            © 2026 Dyslexia Tortuguitas. Conteúdo educativo.
-          </div>
         </div>
+
+      </section>
+
+
+      <footer className="footer">
+
+        <div className="container">
+
+          <h2 className="footer-title">
+            DysHelp
+          </h2>
+
+          <p className="mt-3">
+            Informação, acolhimento e apoio para uma aprendizagem mais inclusiva.
+          </p>
+
+        </div>
+
       </footer>
-    </div>
+
+    </main>
   );
 }

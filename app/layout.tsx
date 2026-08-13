@@ -1,34 +1,26 @@
 import type { Metadata } from "next";
-import { Inter, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
-
-const cormorant = Cormorant_Garamond({
-  subsets: ["latin"],
-  weight: ["400", "600", "700"],
-  variable: "--font-cormorant",
-  display: "swap",
-});
-
 export const metadata: Metadata = {
-  title: "DysHelp - Informação, acolhimento e apoio sobre dislexia",
+  title: "DysHelp",
   description:
-    "Plataforma educativa e de apoio sobre dislexia para pessoas disléxicas, famílias e profissionais.",
+    "Informação, acolhimento e apoio para pessoas com dislexia, famílias e profissionais.",
 };
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
-    <html lang="pt-BR" className={`${inter.variable} ${cormorant.variable}`}>
-      <body className="font-sans antialiased bg-slate-50 text-slate-900">
+    <html lang="pt-BR">
+      <body
+        className="
+          bg-[#F3EAD9]
+          text-[#243B53]
+          antialiased
+        "
+      >
         {children}
       </body>
     </html>

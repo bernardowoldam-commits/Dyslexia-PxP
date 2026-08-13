@@ -2,29 +2,444 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  body {
-    @apply bg-white text-slate-900 font-sans antialiased;
-  }
+/* =========================================================
+   DYSHELP — GLOBAL STYLE
+   Extraído do build atual
+   ========================================================= */
+
+:root {
+  --blue: #6997b8;
+  --orange: #f3a05b;
+  --light-blue: #bad8e8;
+  --cream: #f3ead9;
+  --deep: #234f73;
+  --text: #243b53;
+  --muted: #5d7184;
+  --white: #ffffff;
 }
 
-/* Classes customizadas de Acessibilidade */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--cream);
+  color: var(--text);
+  font-family: var(--font-inter), Inter, Arial, sans-serif;
+  line-height: 1.5;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img {
+  max-width: 100%;
+}
+
+/* CONTAINER */
+
+.container {
+  width: min(1160px, calc(100% - 40px));
+  margin-inline: auto;
+}
+
+
+/* =========================================================
+   TIPOGRAFIA
+========================================================= */
+
+.display-title,
+.section-title,
+.feature-card h2,
+.footer-title {
+  font-family: var(--font-cormorant),
+    "Cormorant Garamond",
+    Georgia,
+    serif;
+
+  font-weight: 700;
+}
+
+
+.display-title {
+  color: var(--deep);
+  font-size: clamp(3rem, 6vw, 5.8rem);
+  line-height: 1;
+  letter-spacing: -0.045em;
+}
+
+
+.section-title {
+  color: var(--deep);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+
+
+.eyebrow {
+  color: var(--deep);
+  font-size: .78rem;
+  font-weight: 800;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero-section {
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      circle at 80% 30%,
+      rgba(186,216,232,.35),
+      transparent 35%
+    ),
+    linear-gradient(
+      180deg,
+      #ffffff,
+      #fbfdfe
+    );
+}
+
+
+.hero-copy {
+  position: relative;
+  z-index: 2;
+}
+
+
+.orange-line {
+  width: 58px;
+  height: 3px;
+  margin-top: 26px;
+
+  background: var(--orange);
+}
+
+
+.hero-text,
+.section-text {
+
+  max-width: 620px;
+
+  margin-top: 24px;
+
+  color: var(--text);
+
+  font-size: 1.08rem;
+
+  line-height: 1.85;
+}
+
+
+
+/* =========================================================
+   BOTÕES
+========================================================= */
+
+.btn {
+
+  display:inline-flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  gap:8px;
+
+  min-height:50px;
+
+  border-radius:999px;
+
+  padding:12px 22px;
+
+  font-weight:800;
+
+  cursor:pointer;
+
+  transition:.2s ease;
+}
+
+
+.btn:hover {
+
+  transform:translateY(-2px);
+
+}
+
+
+.btn-blue {
+
+  background:var(--blue);
+
+  color:white;
+
+}
+
+
+.btn-orange {
+
+  background:var(--orange);
+
+  color:white;
+
+}
+
+
+.btn-outline-orange {
+
+  border:2px solid var(--orange);
+
+  color:#e7853d;
+
+  background:white;
+
+}
+
+
+.btn-soft {
+
+  background:#edf5f9;
+
+  color:var(--deep);
+
+}
+
+
+
+/* =========================================================
+   CARDS
+========================================================= */
+
+
+.feature-card {
+
+  border-radius:24px;
+
+  background:white;
+
+  padding:28px;
+
+  box-shadow:
+    0 12px 35px rgba(35,79,115,.08);
+
+}
+
+
+.feature-card h2 {
+
+  margin-top:20px;
+
+  color:var(--deep);
+
+  font-size:2rem;
+
+  line-height:1.1;
+
+}
+
+
+.feature-card p {
+
+  margin-top:14px;
+
+  color:var(--text);
+
+  line-height:1.7;
+
+}
+
+
+
+.feature-icon {
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  width:58px;
+
+  height:58px;
+
+  border-radius:999px;
+
+}
+
+
+.feature-icon.blue {
+
+  background:rgba(186,216,232,.55);
+
+  color:var(--deep);
+
+}
+
+
+.feature-icon.orange {
+
+  background:rgba(243,160,91,.2);
+
+  color:#e7853d;
+
+}
+
+
+.card-link {
+
+  display:inline-flex;
+
+  align-items:center;
+
+  gap:8px;
+
+  margin-top:22px;
+
+  padding:10px 15px;
+
+  border-radius:12px;
+
+  border:1.5px solid var(--blue);
+
+  color:var(--deep);
+
+  font-weight:700;
+
+}
+
+
+.orange-link {
+
+  border-color:var(--orange);
+
+  color:#e7853d;
+
+}
+
+
+
+/* =========================================================
+   SEÇÕES
+========================================================= */
+
+
+.section {
+
+  padding:80px 0;
+
+}
+
+
+.cream-section {
+
+  background:var(--cream);
+
+}
+
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+
+.footer {
+
+  background:#173a56;
+
+  padding:48px 0 30px;
+
+  color:white;
+
+}
+
+
+.footer-title {
+
+  font-size:1.5rem;
+
+}
+
+
+
+/* =========================================================
+   ACESSIBILIDADE
+========================================================= */
+
+
 .large-text {
-  font-size: 1.15rem;
+
+  font-size:1.08em;
+
 }
 
-.high-contrast {
-  background-color: #000000 !important;
-  color: #ffffff !important;
+
+.contrast body {
+
+  background:white;
+
+  color:black;
+
 }
 
-.high-contrast * {
-  background-color: #000000 !important;
-  color: #ffffff !important;
-  border-color: #444444 !important;
+
+.no-motion *,
+.no-motion *::before,
+.no-motion *::after {
+
+  animation:none!important;
+
+  transition:none!important;
+
 }
 
-.reduce-motion * {
-  animation: none !important;
-  transition: none !important;
+
+
+/* =========================================================
+   RESPONSIVO
+========================================================= */
+
+
+@media(max-width:767px){
+
+.container{
+
+ width:calc(100% - 28px);
+
+}
+
+
+.display-title{
+
+ font-size:clamp(2.8rem,14vw,4rem);
+
+}
+
+
+.section{
+
+ padding:60px 0;
+
+}
+
 }
